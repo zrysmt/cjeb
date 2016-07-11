@@ -1,7 +1,7 @@
 
 define(function (require, exports, module){
 
-	menuList = {
+	var menuList = {
 
 		init:function(root){
 			this.show(root);

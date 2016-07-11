@@ -1,7 +1,7 @@
 
 define(function (require, exports, module){
 
-	subTitle = {
+	var subTitle = {
 
 		init:function(root){
 			this.year = $(root).text()=='水资源'?2012:2008;

@@ -1,19 +1,19 @@
-require.config({
-    paths: {
-        echarts: '../common/js/dist'
-    }
-});
+// require.config({
+//     paths: {
+//         echarts: '../common/js/dist'
+//     }
+// });
 
 define(function(require, exports, module) {
 
-    require('echarts/chart/map');
-    require('echarts/chart/bar');
-    require('echarts/chart/line');
+    // require('echarts/chart/map');
+    // require('echarts/chart/bar');
+    // require('echarts/chart/line');
 
-    charts = {
+    var charts = {
 
         init: function(root) {
-            var ec = require('echarts');
+            // var ec = require('echarts');
             var initInd = $(root).attr('initInd');
             var indtab = $(root).attr('tab');
             var thmmapId = this.getchartId();
@@ -22,7 +22,9 @@ define(function(require, exports, module) {
             var indName = $(root).text();
             var year = indName == '水资源' ? 2012 : 2008;
             this.cnty = '中国';
-            this.myChart = ec.init(dom).showLoading({ effect: 'bubble' }).hideLoading();
+            this.myChart = echarts.init(dom);
+            this.myChart.showLoading();
+            this.myChart.hideLoading();
             this.initOpt();
             this.addval2chart(initInd, year, indtab, type);
         },
@@ -47,18 +49,18 @@ define(function(require, exports, module) {
                     y: 'center',
                     textStyle: { fontFamily: 'Microsoft YaHei' },
                     feature: {
-                        //dataView : {show: true, readOnly: true},
+                        dataView : {show: true, readOnly: true},
                         restore: { show: true },
                         saveAsImage: { show: true }
                     }
                 },
                 dataRange: {
                     realtime: false,
-                    itemHeight: 10,
+                    itemHeight: 60,
                     //splitNumber:6,
                     //borderWidth:1, 
                     textStyle: { color: '#333333' },
-                    //text:['高','低'],
+                    text:['高','低'],
                     calculable: true
                 },
                 series: [{
@@ -157,7 +159,7 @@ define(function(require, exports, module) {
             var option = type == 'theme' ? this.thm.option : this.chart.option;
             this.myChart.clear();
             this.myChart.setOption(option);
-            this.myChart.restore();
+            // this.myChart.restore();
         },
         show: function() {
             var mainId = this.getmainwinId();
