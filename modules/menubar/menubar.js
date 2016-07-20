@@ -10,7 +10,7 @@ define(function (require, exports, module){
 
 		show:function(root){
 			var mapId = this.getMapId();
-			$('#'+mapId).css('zIndex','-1');
+			// $('#'+mapId).css('zIndex','-1');
 			$(root).find('.menuList').show();
 		},
 		hide:function(){

@@ -26,6 +26,11 @@ define(function(require, exports, module) {
         initOpt: function() {
             this.option = {
                 backgroundColor: '#71b7fd',
+                animation: true,
+                animationDuration: 1000,
+                animationEasing: 'cubicInOut',
+                animationDurationUpdate: 1000,
+                animationEasingUpdate: 'cubicInOut',
                 color: ['rgba(30,144,255,1)', 'lime'],
                 tooltip: {
                     trigger: 'item',
@@ -134,7 +139,7 @@ define(function(require, exports, module) {
             var sqlservice = new gEcnu.WebsqlScript({
                 'processCompleted': function(data) {
                     var queryResult = data.queryResult;
-                    console.log(queryResult);
+                    // console.log(queryResult);
                     util.bindContext(self, succ, queryResult);
                     //_callback(queryResult);
                 },

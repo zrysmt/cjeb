@@ -1,98 +1,108 @@
-
 //sea.js配置
-/*seajs.config({
-	'base':'./modules/'
-});*/
+seajs.config({
+    'base': './modules/'
+});
 
 //esl.js配置  
-require.config({
-  baseUrl: './modules/',
-});  
+// require.config({
+//   baseUrl: './modules/',
+// });  
 
-define(function (require){
+define(function(require) {
 
     //统一引进子模块的脚本
     require('menubar/menubar');
     var Eventful = require('mixin/Eventful');
+    var navMod = require('nav/nav');
     var mapviewMod = require('mapview/mapview');
     var menuListMod = require('menubar/menubar');
     var subTitleMod = require('subTitle/subTitle');
     var indlistMod = require('indlist/indlist');
+    var intermapMod = require('intermap/intermap'); //交互地图模块
     var chartsMod = require('charts/charts');
     var modelMod = require('model/model');
     var datamgrMod = require('datamgr/datamgr');
+    //[mixin 将src的方法全部给dests中的js文件，或者说是继承]
     util.mixin(
         [
             menuListMod,
             subTitleMod,
             indlistMod,
+            intermapMod,
             chartsMod,
             modelMod,
             datamgrMod
         ],
         Eventful
-    );    
+    );
 
     menuListMod.addCustomEvt.on('menuclick', menuListMod_menuclick);
     subTitleMod.addCustomEvt.on('yearOrcntyClick', subTitleMod_yearOrcntyClick);
-    subTitleMod.addCustomEvt.on('modelclick',modelMod_modelclick);
-    subTitleMod.addCustomEvt.on('dataclick',datamgrMod_dataclick);
+    // subTitleMod.addCustomEvt.on('intermapclick', intermapMod_intermapClick);
+    subTitleMod.addCustomEvt.on('modelclick', modelMod_modelclick);
+    subTitleMod.addCustomEvt.on('dataclick', datamgrMod_dataclick);
     indlistMod.addCustomEvt.on('indclick', indlistMod_indclick);
-    chartsMod.addCustomEvt.on('initbox',chartsMod_initbox);
+    chartsMod.addCustomEvt.on('initbox', chartsMod_initbox);
 
+    navMod.init(); //主要是登录和注册
     mapviewMod.init();
 
-    var gl_ind,gl_year,gl_cnty,gl_tab;
+    var gl_ind, gl_year, gl_cnty, gl_tab;
 
-    function menuListMod_menuclick(obj,ind,tab){
+    //点击菜单menu
+    function menuListMod_menuclick(obj, ind, tab) {
         gl_ind = ind;
         gl_tab = tab;
-        gl_year = $(obj).text()=='水资源'?2012:2008;
-        gl_cnty = '中国';
-        subTitleMod.init(obj);       
+        gl_year = $(obj).text() == '水资源' ? 2012 : 2008;
+        gl_cnty = '上海';
+        subTitleMod.init(obj);
         indlistMod.init(obj);
-        chartsMod.init(obj);
+        // chartsMod.init(obj); 
+        intermapMod.init(obj); //默认第一个绘制，初始化
+        // intermapMod.renderInteractMap(gl_tab,gl_tab,gl_year);
     }
 
-    function subTitleMod_yearOrcntyClick(year_cnty,type){
-        if(type=='line'){
-            gl_cnty = year_cnty;     
-        }else{
+    function subTitleMod_yearOrcntyClick(year_cnty, type) {
+        if (type == 'line') {
+            gl_cnty = year_cnty;
+        } else {
             gl_year = year_cnty;
         }
-        if($('#mainwin').is(':hidden')) chartsMod.show();
-        chartsMod.addval2chart(gl_ind,year_cnty,gl_tab,type);
+        if ($('#mainwin').is(':hidden')) chartsMod.show();
+        if (type == 'intermap') {
+            console.log('选择年份');
+            intermapMod.renderInteractMap(gl_tab,gl_ind,year_cnty);
+            // intermapMod.init();
+        } else {
+            chartsMod.addval2chart(gl_ind, year_cnty, gl_tab, type);
+        }
     }
 
-    function indlistMod_indclick(indName,tab,type){
+    function indlistMod_indclick(indName, tab, type) {
         gl_ind = indName;
         gl_tab = tab;
-        var year_cnty = type=='line'?gl_cnty:gl_year;
-        chartsMod.addval2chart(indName,year_cnty,tab,type);
+        var year_cnty = type == 'line' ? gl_cnty : gl_year;
+        if (type == 'intermap') {
+            intermapMod.renderInteractMap(gl_tab,gl_ind,year_cnty);
+        }else{
+            chartsMod.addval2chart(indName, year_cnty, tab, type);
+        }
     }
 
-    function chartsMod_initbox(type){
+    function intermapMod_intermapClick() {
+        intermapMod.renderInteractMap(gl_tab,gl_ind,gl_year);
+    }
+
+    function chartsMod_initbox(type) {
         subTitleMod.initbox(type);
     }
 
-    function modelMod_modelclick(){
+    function modelMod_modelclick() {
         modelMod.init();
     }
 
-    function datamgrMod_dataclick(){
+    function datamgrMod_dataclick() {
         datamgrMod.init();
     }
 
 });
-  
-
-
-
-
-  
-
-
-
-
-
-

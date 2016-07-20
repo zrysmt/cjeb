@@ -5,7 +5,7 @@ define(function (require, exports, module){
 
 		init:function(root){
 			this.year = $(root).text()=='水资源'?2012:2008;
-			this.cnty = '中国'; 
+			this.cnty = '上海'; 
 			this.changeTitle(root);
 			this.initbox('年份');
 			this.highlight4thm();
@@ -33,7 +33,7 @@ define(function (require, exports, module){
 		},
 		initbox:function(type){
 			var boxId = this.getyear_cnty_boxId();
-			var titleId = this.getsubyear_cntyId();
+			var titleId = this.getsubyear_cntyId();//id='sub_year_cnty'
 			$('#'+boxId).show();
 			$('#'+titleId).attr('type',type);
 			this.closebox(type);
@@ -58,7 +58,7 @@ define(function (require, exports, module){
 				$('#'+subyear_cntyId).text(year+'年').prev().text('年 份：');
 			}else{
 				var len = cnty.length;
-				var state = len>5?'国家:':(len==5 && $(window).width()<=1200)?'国家:':'国 家：';
+				var state = len>5?'城市:':(len==5 && $(window).width()<=1200)?'城市:':'城 市：';
 				$('#'+subyear_cntyId).text(cnty).prev().text(state);
 			}
 		},
@@ -149,6 +149,7 @@ define(function (require, exports, module){
 
 	$('#yearlist').on('click','.year_cnty_Item',function(){
 		var type = $('#subTab .select').eq(0).attr('type');
+		// console.log(type);
 		if(type=='line') type = 'bar';
 		var flag = '年份';
 		var year = $(this).text();
@@ -160,7 +161,7 @@ define(function (require, exports, module){
 
 	$('#cntylist').on('click','.year_cnty_Item',function(){
 		var type = 'line';
-		var flag = '国家';
+		var flag = '城市';
 		var cnty = $(this).text();
 		subTitle.cnty = cnty;
 		subTitle.closebox(flag);
@@ -174,22 +175,23 @@ define(function (require, exports, module){
 		var year = subTitle.year;
 		var type = '年份';
 		switch($(this).text()){
+			case '交互地图':
+				subTitle.initbox(type);
+				// subTitle.trigger('intermapclick',year,'intermap');
+				subTitle.trigger('yearOrcntyClick',year,'intermap');
+				break;
 			case '专题地图':
 				subTitle.initbox(type);
 				subTitle.trigger('yearOrcntyClick',year,'theme');
 				break;
-			case '图表展示':
-				$(this).attr('type','bar');
+			case '地区图表':
+				// $(this).attr('type','bar');
 				subTitle.initbox(type);
 				subTitle.trigger('yearOrcntyClick',year,'bar');
 				break;
-			case '模型分析':
-				$('#year_cnty_box').hide();
-				subTitle.trigger('modelclick');
-				break;
-			case '数据管理':
-				$('#year_cnty_box').hide();
-				subTitle.trigger('dataclick');
+			case '时间图表':
+				subTitle.initbox(type);
+				subTitle.trigger('yearOrcntyClick',year,'line');
 				break;
 		}
 	});

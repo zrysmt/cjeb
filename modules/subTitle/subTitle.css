@@ -94,7 +94,8 @@
 }
 
 .subTab:hover {
-    color: #439f55;
+    opacity: .7;
+    color: #337ab7;
 }
 
 .subTab:last-child {
@@ -138,7 +139,7 @@
 }
 
 .year_cnty_Item:hover {
-    color: #439f55;
+    color: #337ab7;
 }
 
 .boxclk {
