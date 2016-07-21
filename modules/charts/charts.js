@@ -29,6 +29,7 @@ define(function(require, exports, module) {
             // this.addval2chart(initInd, year, indtab, type);
         },
         initOpt: function() {
+            var self =this;
             this.thm = {};
             this.chart = {};
             this.thm.option = { //专题图的配置
@@ -53,12 +54,20 @@ define(function(require, exports, module) {
                     y: 'center',
                     textStyle: { fontFamily: 'Microsoft YaHei' },
                     feature: {
+                       /* myTool_isNameShow: {
+                            show: true,
+                            title: '显示城市名',
+                            icon: 'path://M432.45,595.444c0,2.177-4.661,6.82-11.305,6.82c-6.475,0-11.306-4.567-11.306-6.82s4.852-6.812,11.306-6.812C427.841,588.632,432.452,593.191,432.45,595.444L432.45,595.444z M421.155,589.876c-3.009,0-5.448,2.495-5.448,5.572s2.439,5.572,5.448,5.572c3.01,0,5.449-2.495,5.449-5.572C426.604,592.371,424.165,589.876,421.155,589.876L421.155,589.876z M421.146,591.891c-1.916,0-3.47,1.589-3.47,3.549c0,1.959,1.554,3.548,3.47,3.548s3.469-1.589,3.469-3.548C424.614,593.479,423.062,591.891,421.146,591.891L421.146,591.891zM421.146,591.891',
+                            onclick: function() {
+                                if(self.thm.option.series[0].itemStyle.normal.label.show){
+                                    self.thm.option.series[0].itemStyle.normal.label.show = false;
+                                }else{
+                                    self.thm.option.series[0].itemStyle.normal.label.show = true;
+                                }
+                                self.myChart.setOption(self.option);
+                            }
+                        },*/
                         dataView: { show: true, readOnly: true },
-                        // dataZoom: { show: true },
-                        // magicType: {
-                        //     show: true,
-                        //     type: ['line', 'bar', 'stack', 'tiled']
-                        // },
                         restore: { show: true },
                         saveAsImage: { show: true }
                     }
@@ -73,21 +82,20 @@ define(function(require, exports, module) {
                 //     calculable: true
                 // },
                 visualMap: {
-                    min: 0,
-                    max: 1000000,
                     text: ['高', '低'],
                     realtime: false,
                     calculable: true,
-                    inRange: {
-                        color: ['lightskyblue', 'yellow', 'orangered']
-                    }
+                    // inRange: {
+                    //     color: ['lightskyblue', 'yellow', 'orangered']
+                    // }
                 },
                 series: [{
-                    type: 'map',
-                    mapType: 'china',
+                    id:'thmmap',
+                    // type: 'map',
+                    // mapType: 'china',
                     roam: true,
-                    center: [112, 28],
-                    zoom: 2,
+                    center: [109.5, 28],
+                    zoom: 1.5,
                     itemStyle: {
                         normal: {
                             borderColor: 'rgba(100,149,237,1)',
@@ -108,6 +116,11 @@ define(function(require, exports, module) {
             };
             this.chart.option = {
                 backgroundColor: '#fff',
+                animation: true,
+                animationDuration: 1000,
+                animationEasing: 'cubicInOut',
+                animationDurationUpdate: 1000,
+                animationEasingUpdate: 'cubicInOut',
                 title: {
                     //text: '',
                     x: 'center',
@@ -172,15 +185,29 @@ define(function(require, exports, module) {
             };
         },
         initChart: function(type) {
-            var option = type == 'theme' ? this.thm.option : this.chart.option;
-            var thmmapId = this.getchartId();
-            var dom = document.getElementById(thmmapId);
-            this.myChart = echarts.init(dom);
-            this.myChart.showLoading();
-            this.myChart.hideLoading();
-            // this.myChart.clear();
-            this.myChart.setOption(option);
-            // this.myChart.restore();
+            var self = this;
+
+            if (type == 'theme') {
+                var option = this.thm.option;
+                $.get('/cjeb/common/jslib/publib/echarts/cjeb.json', function(cjebJson) {
+                    echarts.registerMap('cjeb', cjebJson);
+
+                    self.myChart.setOption({
+                        series: {
+                            id:'thmmap',
+                            type: 'map',
+                            map: 'cjeb'
+                        }
+                    });
+                    if (option && typeof option === "object") {
+                        self.myChart.setOption(option);
+                    }
+                });
+            } else {
+                var option = this.chart.option;
+                // this.myChart.clear();
+                this.myChart.setOption(option);
+            }
         },
         show: function() {
             var mainId = this.getmainwinId();
@@ -204,7 +231,7 @@ define(function(require, exports, module) {
             var self = this;
             var option = self.thm.option;
             if ($(window).width() <= 1200) {
-                option.dataRange.itemHeight = 8;
+                option.visualMap.itemHeight = 8;
                 var loc = option.series[0].mapLocation;
                 loc.x = -440;
                 loc.y = -40;
@@ -253,6 +280,11 @@ define(function(require, exports, module) {
             for (var j = 0; j < rst.length; j++) {
                 var obj = {};
                 obj.name = rst[j]['V2']; //城市名
+                if (obj.name === '上海市') {
+                    obj.name = '上海';
+                } else if (obj.name === '重庆市') {
+                    obj.name = '重庆';
+                }
                 var val = rst[j][v_inx];
                 obj.value = val; //指标的值
                 // console.log(val);
@@ -260,28 +292,52 @@ define(function(require, exports, module) {
                 var s = obj.name;
                 data.push(obj);
             }
+            console.log(data);
             option.series[0].data = data;
             option.series[0].name = ind;
-            /* if (value.length != 0) {
-                 option.dataRange.color = ['#F08080', '#f1f075', '#8acff2'];
-                 var min = util.minval(value),
-                     max = util.maxval(value);
-                 option.dataRange.min = self._getmin4thm(min);
-                 option.dataRange.max = self._getmax4thm(max);
-             } else {
-                 option.dataRange.color = ['#e5e5e5', '#e5e5e5', '#e5e5e5'];
-                 option.dataRange.min = 0;
-                 option.dataRange.max = 0;
-                 util.showTipWin('暂未提供数据');
-             }*/
+            if (value.length != 0) {
+                var min = util.minval(value),
+                    max = util.maxval(value);
+                // option.visualMap.inRange.color = ['#F08080', '#f1f075', '#8acff2'];
+                option.visualMap.min = self._getmin4thm(min);
+                option.visualMap.max = self._getmax4thm(max);
+                /*self.myChart.setOption({
+                    visualMap: {
+                        min: self._getmin4thm(min),
+                        max: self._getmax4thm(max),
+                        inRange: {
+                            color: ['#F08080', '#f1f075', '#8acff2']
+                        }
+                    },
+                    // series:{
+                    //     id:'thmmap',
+                    //     name:ind,
+                    //     data:data
+                    // }
+                });*/
+            } else {
+                // option.visualMap.inRange.color = ['#e5e5e5', '#e5e5e5', '#e5e5e5'];
+                option.visualMap.min = 0;
+                option.visualMap.max = 0;
+                /*self.myChart.setOption({
+                    visualMap: {
+                        min: 0,
+                        max: 0,
+                        inRange: {
+                            color: ['#e5e5e5', '#e5e5e5', '#e5e5e5']
+                        }
+                    }
+                });*/
+                util.showTipWin('暂未提供数据');
+            }
             option.tooltip.formatter = function(params) {
                 // console.log(params);
-                if (typeof params.value == 'number') {
+                if (typeof params.value == 'number'&& !isNaN(params.value)) {
                     if (params.value != '') {
                         var value = (params.value.toFixed(2) + '').split('.');
                         var decimal = value[1] ? '.' + value[1][0] + value[1][1] : '';
                         value = value[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') + decimal;
-                        return params.seriesName + units + '<br/>' + params.name + ' : ' + value;
+                        return ind + units + '<br/>' + params.name + ' : ' + value;
                     } else {
                         return params.name + '：-';
                     }
@@ -293,7 +349,7 @@ define(function(require, exports, module) {
             self.initChart('theme');
         },
         _proRst4chart: function(rst, ind, karr, unit, type) {
-           
+
             var self = this;
             console.info(karr + unit + type);
             var option = self.chart.option;
@@ -377,6 +433,11 @@ define(function(require, exports, module) {
         },
         addval2chart: function(ind, year_cnty, table, type) {
             var self = this;
+            var thmmapId = this.getchartId();
+            var dom = document.getElementById(thmmapId);
+            this.myChart = echarts.init(dom);
+            this.myChart.showLoading();
+            this.myChart.hideLoading();
             this.initOpt();
 
             console.log(ind + ' ' + year_cnty + ' ' + table + ' ' + type);
