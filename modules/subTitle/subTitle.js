@@ -5,7 +5,7 @@ define(function (require, exports, module){
 
 		init:function(root){
 			this.year = $(root).text()=='水资源'?2012:2008;
-			this.cnty = '上海'; 
+			this.cnty = '上海市'; 
 			this.changeTitle(root);
 			this.initbox('年份');
 			this.highlight4thm();
@@ -184,14 +184,14 @@ define(function (require, exports, module){
 				subTitle.initbox(type);
 				subTitle.trigger('yearOrcntyClick',year,'theme');
 				break;
-			case '地区图表':
+			case '图表展示':
 				// $(this).attr('type','bar');
-				subTitle.initbox(type);
+				// subTitle.initbox(type);
 				subTitle.trigger('yearOrcntyClick',year,'bar');
 				break;
-			case '时间图表':
+			case '数据管理':
 				subTitle.initbox(type);
-				subTitle.trigger('yearOrcntyClick',year,'line');
+				subTitle.trigger('dataclick');
 				break;
 		}
 	});

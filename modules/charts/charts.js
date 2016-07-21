@@ -131,7 +131,9 @@ define(function(require, exports, module) {
                     x: 'right',
                     y: 'center',
                     feature: {
-                        magicType: { show: true, type: [] }, //'stack','tiled'
+                        magicType: { show: true, type: ['line', 'bar'] }, //'stack','tiled'
+                        dataZoom: { show: true },
+                        dataView: { show: true },
                         restore: { show: true },
                         saveAsImage: { show: true }
                     }
@@ -291,15 +293,16 @@ define(function(require, exports, module) {
             self.initChart('theme');
         },
         _proRst4chart: function(rst, ind, karr, unit, type) {
+           
             var self = this;
             console.info(karr + unit + type);
             var option = self.chart.option;
             var k_inx = 'V2';
-            var magicType = ['bar'];
+            // var magicType = ['bar'];
             if (type == 'line') {
                 k_inx = 'V4';
-                rst.reverse();
-                magicType.unshift('line');
+                // rst.reverse();
+                // magicType.unshift('line');
             }
             var v_inx = karr[1];
             var data = [],
@@ -320,15 +323,16 @@ define(function(require, exports, module) {
             option.series[0].type = type;
             option.series[0].data = data;
             option.series[0].name = option.legend.data[0] = ind + units;
-            option.toolbox.feature.magicType.type = magicType;
+            // option.toolbox.feature.magicType.type = magicType;
             var max = util.maxval(valueArr),
                 min = util.minval(valueArr),
                 logval = Math.pow(10, 9);
             if (max >= logval || min <= -logval) option.yAxis[0].type = 'log';
             if (valueArr.length == 0) util.showTipWin('暂未提供数据');
             option.tooltip.formatter = function(params) {
+                if (!params || params.length == 0) return;
                 var params = params[0];
-                if (params.value != '-') {
+                if (params.value != '-' && params.value) {
                     var value = (params.value.toFixed(2) + '').split('.');
                     var decimal = value[1] ? '.' + value[1][0] + value[1][1] : '';
                     value = value[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') + decimal;
@@ -347,8 +351,8 @@ define(function(require, exports, module) {
             if (type == 'line') {
                 fldArr[0] = 'V4';
                 filter = "V2 = '" + year_cnty + "'";
-            }else{
-                filter = "V4 ='" + year_cnty+ "'";
+            } else {
+                filter = "V4 ='" + year_cnty + "'";
             }
             console.log(filter);
 
@@ -378,10 +382,10 @@ define(function(require, exports, module) {
             console.log(ind + ' ' + year_cnty + ' ' + table + ' ' + type);
             if (type == 'line') {
                 self.cnty = year_cnty || '上海市';
-                year_cnty = '上海市';
+                if (!year_cnty) year_cnty = '上海市';
             } else {
                 self.year = year_cnty || '2008';
-                year_cnty = '2008';
+                if (!year_cnty) year_cnty = '2008';
                 if (type == 'bar') {
                     self.arrowshow();
                 } else {
@@ -389,8 +393,6 @@ define(function(require, exports, module) {
                 }
             }
             self.ind = ind, self.tab = table;
-            console.log(self.tab);
-            console.log(self.ind);
             var tab = 'fieldsdef'; //查询出表中每列代表的含义
             var filter = "fieldRealname = '" + ind + "'";
             filter += "AND tabname = '" + table + "'";
@@ -426,6 +428,7 @@ define(function(require, exports, module) {
             $('#' + boxId).css('left', 'initial');
             var width_ct = $('#' + chartId).css('width');
             var width_box = $('#' + boxId).css('width');
+            console.log(width_ct);
             var sub_year_cntyId = this.getsubyearcntyId();
             var cnty = this.cnty,
                 year = this.year;
@@ -433,7 +436,7 @@ define(function(require, exports, module) {
                 // var len = cnty.length;
                 // var state = len > 5 ? '城市:' : (len == 5 && $(window).width() <= 1200) ? '城市:' : '城 市：';
                 this.trigger('initbox', '城市');
-                $('#' + chartId).css('width', 0).animate({ width: width_ct });
+                // $('#' + chartId).css('width', 0).animate({ width: width_ct });
                 $('#' + boxId).css('width', 0).animate({ width: width_box });
                 $(root).attr({ 'title': '切换回柱状图', 'to': 'bar' }).css('background', 'url(modules/charts/imgs/arrow_left.png) no-repeat');
                 $('#' + sub_year_cntyId).attr('type', '城市').text(cnty).prev().text('城 市:');
@@ -444,7 +447,7 @@ define(function(require, exports, module) {
                 var boxDom = document.getElementById(boxId);
                 var left_ct = chartDom.offsetLeft;
                 var left_box = boxDom.offsetLeft;
-                $('#' + chartId).css({ 'left': left_ct, 'width': 0 }).animate({ width: width_ct });
+                // $('#' + chartId).css({ 'left': left_ct, 'width': 0 }).animate({ width: width_ct });
                 $('#' + boxId).css({ 'left': left_box, 'width': 0 }).animate({ width: width_box });
                 $(root).attr({ 'title': '切换至历年变化折线图', 'to': 'line' }).css('background', 'url(modules/charts/imgs/arrow_right.png) no-repeat');
                 $('#' + sub_year_cntyId).attr('type', '年份').text(year + '年').prev().text('年 份：');
@@ -490,7 +493,7 @@ define(function(require, exports, module) {
         var year = charts.year;
         var cnty = charts.cnty;
         var toType = $(this).attr('to');
-        console.log(toType);
+        console.log(year + ' ' + cnty + ' ' + toType);
         charts.toggle4chart(this);
         if (toType == 'line') {
             charts.addval2chart(ind, cnty, tab, toType);

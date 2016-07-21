@@ -54,7 +54,7 @@ define(function(require) {
         gl_ind = ind;
         gl_tab = tab;
         gl_year = $(obj).text() == '水资源' ? 2012 : 2008;
-        gl_cnty = '上海';
+        gl_cnty = '上海市';
         subTitleMod.init(obj);
         indlistMod.init(obj);
         // chartsMod.init(obj); 
@@ -89,9 +89,9 @@ define(function(require) {
         }
     }
 
-    function intermapMod_intermapClick() {
-        intermapMod.renderInteractMap(gl_tab,gl_ind,gl_year);
-    }
+    // function intermapMod_intermapClick() {
+    //     intermapMod.renderInteractMap(gl_tab,gl_ind,gl_year);
+    // }
 
     function chartsMod_initbox(type) {
         subTitleMod.initbox(type);

@@ -14,7 +14,7 @@ define(function(require, exports, module) {
                 indName = $(root).text();
             }
             var year = 2008;
-            this.cnty = '上海';
+            this.cnty = '上海市';
             
             this.renderInteractMap(indtab, initInd, year);
         },
