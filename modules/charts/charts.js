@@ -85,7 +85,6 @@ define(function(require, exports, module) {
                         id: 'thmmap',
                         // type: 'map',
                         // mapType: 'china',
-                        // coordinateSystem: 'bmap',
                         roam: true,
                         center: [109.5, 28],
                         zoom: 5,
@@ -105,9 +104,6 @@ define(function(require, exports, module) {
                                 label: { show: true, textStyle: { color: '#439f55', fontSize: 12, fontFamily: 'Microsoft YaHei' } }
                             }
                         },
-                        // data:[
-                        //     { name: '河南', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } }, emphasis: { show: true, textStyle: { color: '#439f55' } } } },
-                        // ],
                         zlevel: 9
                     }
 
@@ -184,11 +180,12 @@ define(function(require, exports, module) {
                 }]
             };
         },
-        initScatterOpt: function(geoCoordMap, data) {
+        initScatterOpt: function(geoCoordMap, data, ind, unit) {
             var self = this;
             this.scatter = {};
             var array = [];
             var maxVal = 1;
+            var legendData = ind + '(' + unit + ')';
             var convertData = function(data) {
                 var res = [];
                 for (var i = 0; i < data.length; i++) {
@@ -202,12 +199,9 @@ define(function(require, exports, module) {
                 }
                 return res;
             };
-            console.info(geoCoordMap);
-            console.info(data);
-            console.info(convertData(data));
             if (data.length != 0) {
                 for (var i = 0; i < data.length; i++) {
-                    if(data[i].value)  array.push(data[i].value);
+                    if (data[i].value) array.push(data[i].value);
                 }
                 maxVal = Math.max.apply(null, array);
             }
@@ -226,8 +220,31 @@ define(function(require, exports, module) {
                     trigger: 'item',
                     formatter: '{b}'
                 },
+                legend: {
+                    orient: 'vertical',
+                    y: 'top',
+                    x: 'right',
+                    data: [legendData],
+                    textStyle: {
+                        color: '#337AB7'
+                    }
+                },
+                toolbox: {
+                    show: true,
+                    orient: 'vertical',
+                    x: 'right',
+                    y: 'center',
+                    textStyle: { fontFamily: 'Microsoft YaHei' },
+                    feature: {
+                        dataView: { show: true, readOnly: true },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
                 geo: {
                     map: 'china',
+                    center: [109.5, 28],
+                    zoom: 3,
                     label: {
                         emphasis: {
                             show: false
@@ -236,23 +253,25 @@ define(function(require, exports, module) {
                     roam: true,
                     itemStyle: {
                         normal: {
-                            areaColor: '#323c48',
-                            borderColor: '#111'
+                            areaColor: '#eee',
+                            borderColor: 'rgba(100,149,237,1)',
+                            borderWidth: 0.5
                         },
                         emphasis: {
-                            areaColor: '#2a333d'
+                            areaColor: '#feda9d'
                         }
                     }
                 },
                 series: [{
-                    name: 'value',
+                    name: legendData,
                     type: 'scatter',
                     coordinateSystem: 'geo',
                     data: convertData(data),
                     symbolSize: function(val) {
-                        val = val ? val : 0;
-                        console.info(val);
-                        return (val / maxVal) * 20;
+                        val[2] = val[2] ? val[2] : 0;
+                        if (val[2])
+                            return Math.max((val[2] / maxVal) * 25, 8);
+                        // return 15;
 
                     },
                     label: {
@@ -272,6 +291,22 @@ define(function(require, exports, module) {
                     }
                 }]
             };
+            this.scatter.option.tooltip.formatter = function(params) {
+                // console.log(params);
+                if (typeof params.value[2] == 'number' && !isNaN(params.value[2])) {
+                    if (params.value[2] != '') {
+                        var value = (params.value[2].toFixed(2) + '').split('.');
+                        var decimal = value[1] ? '.' + value[1][0] + value[1][1] : '';
+                        value = value[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') + decimal;
+                        return ind + '(' + unit + ')' + '<br/>' + params.name + ' : ' + value;
+                    } else {
+                        return params.name + '：-';
+                    }
+                } else {
+                    return params.name;
+                }
+            };
+            this.initChart('scatter');
         },
         initChart: function(type) {
             var self = this;
@@ -293,6 +328,7 @@ define(function(require, exports, module) {
                 });
             } else if (type == 'scatter') {
                 var option2 = this.scatter.option;
+                console.log(option2);
                 this.myChart.setOption(option2);
 
             } else {
@@ -368,7 +404,8 @@ define(function(require, exports, module) {
          */
         _proRst4map: function(rst, ind, karr, unit, type) {
             var self = this;
-            var option = type == "theme" ? self.thm.option : self.scatter.option;
+            // var option = type == "theme" ? self.thm.option : self.scatter.option;
+            var option = self.thm.option;
             var v_inx = karr[1];
             var data = [],
                 value = [];
@@ -411,11 +448,13 @@ define(function(require, exports, module) {
                 { name: '海南', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
                 { name: '南海诸岛', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
             ];
-            [].push.apply(data, otherProv);
-            console.log(data);
-            option.series[0].data = data;
-            option.series[0].name = ind;
+            /*option.series[0].name = ind + units;
+            option.legend.data[0] = option.series[0].name;*/
             if (type == "theme") {
+                [].push.apply(data, otherProv);
+                console.log(data);
+                option.series[0].data = data;
+                option.series[0].name = ind;
                 if (value.length != 0) {
                     var min = util.minval(value),
                         max = util.maxval(value);
@@ -496,8 +535,57 @@ define(function(require, exports, module) {
                 } else {
                     return params.name + '：-';
                 }
-            }
+            };
             self.initChart('chart');
+        },
+        _parseCitysData: function(cityLocData, ind, fldArr, unit, cityValRst) {
+            // console.log(cityLocData);
+            console.log(cityValRst);
+            console.log(fldArr);
+            var geoCoordMap = '{';
+            for (var i = 0, len = cityLocData.length; i < len; i++) {
+                geoCoordMap += '"' + cityLocData[i].CITYNAME + '":[' + cityLocData[i].LNG + ',' + cityLocData[i].LAT + '],';
+            }
+            geoCoordMap = JSON.parse(geoCoordMap.slice(0, -1) + '}');
+            // console.log(geoCoordMap);
+
+            var citysVal = [];
+            var valj;
+            for (var j = 0; j < cityValRst.length; j++) {
+                var oneCityObj = {};
+                valj = cityValRst[j][fldArr[1]];
+                if (!valj || valj == 'null') {
+                    valj = 0;
+                }
+                console.info(valj);
+                oneCityObj.name = cityValRst[j][fldArr[0]];
+                oneCityObj.value = valj;
+                citysVal.push(oneCityObj);
+            }
+            console.log(citysVal);
+
+            this.initScatterOpt(geoCoordMap, citysVal, ind, unit);
+        },
+        _queryAllCitysLatlng: function(cityValRst, ind, fldArr, unit) {
+            var self = this;
+            var succ = self._parseCitysData;
+            var sqlservice = new gEcnu.WebSQLServices.SQLServices({
+                'processCompleted': function(data) {
+                    // console.log(data); 
+                    if (data.length && data.length !== 0) {
+                        util.bindContext(self, succ, data, ind, fldArr, unit, cityValRst);
+                    }
+                },
+                'processFailed': function() {
+                    console.error('query error');
+                }
+            });
+            var sql = {
+                'lyr': 't_allCitys',
+                'fields': '*',
+                // 'filter': 'id=2'
+            };
+            sqlservice.processAscyn("SQLQUERY", "CJEB", sql);
         },
         _reqData: function(rst, ind, year_cnty, tab, type) {
             var self = this;
@@ -521,9 +609,11 @@ define(function(require, exports, module) {
                 "filter": filter
             };
             var succ;
-            if (type === 'theme' || type === 'scatter') {
+            if (type === 'theme' /*|| type === 'scatter'*/ ) {
                 succ = self._proRst4map;
-            } else {
+            } else if (type === 'scatter') {
+                succ = self._queryAllCitysLatlng;
+            } else if (type === 'bar' || type === 'line') {
                 succ = self._proRst4chart;
             }
 
@@ -545,10 +635,10 @@ define(function(require, exports, module) {
             this.myChart.showLoading();
             this.myChart.hideLoading();
             if (type === 'scatter') {
-                console.log(dataStorage.geoCoordMap);
-                console.log(dataStorage.citysVal);
-                var callbackFuc = this.initScatterOpt(dataStorage.geoCoordMap, dataStorage.citysVal);
-                // charts.trigger('getDBData', callbackFuc);
+                /* console.log('======'+type);
+                 var callbackFuc = this.initScatterOpt(dataStorage.geoCoordMap, dataStorage.citysVal);
+                 // charts.trigger('getDBData', callbackFuc);
+                 self.initChart('scatter');*/
             } else {
                 this.initOpt();
             }

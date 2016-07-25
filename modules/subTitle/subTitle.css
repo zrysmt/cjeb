@@ -38,7 +38,7 @@
 }
 
 #cntylist {
-    height: 277px;
+    height: 385px;
 }
 
 .sub_year_cnty_list {
@@ -128,7 +128,10 @@
     box-shadow: 0 1px 1px #999;
     z-index: 99;
 }
-
+#cntylist .sub_year_cnty_ul li{
+    margin: 0 5px 0 5px;
+    width: 155px;
+}
 .sub_year_cnty_ul li {
     border-bottom: 1px solid #dedede;
     margin: 0 13px 0 12px;
