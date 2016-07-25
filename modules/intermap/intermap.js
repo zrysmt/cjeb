@@ -4,6 +4,7 @@
  * 2016-07-15
  */
 define(function(require, exports, module) {
+    var dataStorage = require('../../common/js/dataStorage');
     var intermap = {
         init: function(root) {
             // console.log(root);
@@ -80,7 +81,7 @@ define(function(require, exports, module) {
                     itemStyle: {
                         normal: {
                             areaColor: '#323c48',
-                            borderColor: '#111'
+                            borderColor: '#ccc'
                         },
                         emphasis: {
                             areaColor: '#2a333d'
@@ -118,17 +119,25 @@ define(function(require, exports, module) {
             };
         },
         initOptSeries: function(convertedData,unit) {
-            this.valArray = [];
             var self = this;
+            var maxVal = 1;
+            var valArray = [];
+
             this.initOpt();//option
+            if(convertedData.length!=0){
+                for (var i = 0; i < convertedData[0].length; i++) {
+                    if(convertedData[0][i].value[2]) valArray.push(convertedData[0][i].value[2]);
+                }
+                maxVal = Math.max.apply(null, valArray);
+            }
             this.option.series.push({
                 name: '长江经济带城市',
                 type: 'scatter',
                 coordinateSystem: 'geo',
                 data: convertedData[0],
                 symbolSize: function(val) {
-                    self.valArray.push(val[2]);
-                    return Math.max((val[2] / Math.max.apply(null, self.valArray)) * 20, 8);
+                    val[2] = val[2]?val[2]:0;
+                    return Math.max((val[2] / maxVal) * 20, 8);
                 },
                 label: {
                     normal: {
@@ -151,7 +160,8 @@ define(function(require, exports, module) {
                 coordinateSystem: 'geo',
                 data: convertedData[1],
                 symbolSize: function(val) {
-                    return Math.max((val[2] / Math.max.apply(null, self.valArray)) * 20, 8);;
+                    val[2] = val[2]?val[2]:0;
+                    return Math.max((val[2] / maxVal) * 20, 8);
                 },
                 showEffectOn: 'emphasis',
                 rippleEffect: {
@@ -505,6 +515,12 @@ define(function(require, exports, module) {
                 citysVal.push(oneCityObj);
             }
             console.log(citysVal);
+            if(this.callbackFuc){//有回掉函数，只是取得数据即可
+                this.callbackFuc(geoCoordMap, citysVal);
+                return;
+            }
+            dataStorage.geoCoordMap = geoCoordMap;
+            dataStorage.citysVal = citysVal;
             this.useData2InitChart(geoCoordMap, citysVal,unit);
         },
         _queryAllCitysLatlng: function(cityValRst, ind, fldArr, unit) {
@@ -581,7 +597,10 @@ define(function(require, exports, module) {
             };
             sqlservice.processAscyn("SQLQUERY", "CJEB", sql);
         },
-        
+        getDBData:function(table, ind, year,callback){
+            this.callbackFuc = callback;
+            this.renderInteractMap(table, ind, year);
+        },
 
         getchartwinId: function() {
             return 'chartwin';

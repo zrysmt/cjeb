@@ -9,6 +9,7 @@ define(function(require, exports, module) {
     // require('echarts/chart/map');
     // require('echarts/chart/bar');
     // require('echarts/chart/line');
+    var dataStorage = require('../../common/js/dataStorage');
 
     var charts = {
 
@@ -29,7 +30,7 @@ define(function(require, exports, module) {
             // this.addval2chart(initInd, year, indtab, type);
         },
         initOpt: function() {
-            var self =this;
+            var self = this;
             this.thm = {};
             this.chart = {};
             this.thm.option = { //专题图的配置
@@ -54,33 +55,24 @@ define(function(require, exports, module) {
                     y: 'center',
                     textStyle: { fontFamily: 'Microsoft YaHei' },
                     feature: {
-                       /* myTool_isNameShow: {
-                            show: true,
-                            title: '显示城市名',
-                            icon: 'path://M432.45,595.444c0,2.177-4.661,6.82-11.305,6.82c-6.475,0-11.306-4.567-11.306-6.82s4.852-6.812,11.306-6.812C427.841,588.632,432.452,593.191,432.45,595.444L432.45,595.444z M421.155,589.876c-3.009,0-5.448,2.495-5.448,5.572s2.439,5.572,5.448,5.572c3.01,0,5.449-2.495,5.449-5.572C426.604,592.371,424.165,589.876,421.155,589.876L421.155,589.876z M421.146,591.891c-1.916,0-3.47,1.589-3.47,3.549c0,1.959,1.554,3.548,3.47,3.548s3.469-1.589,3.469-3.548C424.614,593.479,423.062,591.891,421.146,591.891L421.146,591.891zM421.146,591.891',
-                            onclick: function() {
-                                if(self.thm.option.series[0].itemStyle.normal.label.show){
-                                    self.thm.option.series[0].itemStyle.normal.label.show = false;
-                                }else{
-                                    self.thm.option.series[0].itemStyle.normal.label.show = true;
-                                }
-                                self.myChart.setOption(self.option);
-                            }
-                        },*/
+                        /* myTool_isNameShow: {
+                             show: true,
+                             title: '显示城市名',
+                             icon: 'path://M432.45,595.444c0,2.177-4.661,6.82-11.305,6.82c-6.475,0-11.306-4.567-11.306-6.82s4.852-6.812,11.306-6.812C427.841,588.632,432.452,593.191,432.45,595.444L432.45,595.444z M421.155,589.876c-3.009,0-5.448,2.495-5.448,5.572s2.439,5.572,5.448,5.572c3.01,0,5.449-2.495,5.449-5.572C426.604,592.371,424.165,589.876,421.155,589.876L421.155,589.876z M421.146,591.891c-1.916,0-3.47,1.589-3.47,3.549c0,1.959,1.554,3.548,3.47,3.548s3.469-1.589,3.469-3.548C424.614,593.479,423.062,591.891,421.146,591.891L421.146,591.891zM421.146,591.891',
+                             onclick: function() {
+                                 if(self.thm.option.series[0].itemStyle.normal.label.show){
+                                     self.thm.option.series[0].itemStyle.normal.label.show = false;
+                                 }else{
+                                     self.thm.option.series[0].itemStyle.normal.label.show = true;
+                                 }
+                                 self.myChart.setOption(self.option);
+                             }
+                         },*/
                         dataView: { show: true, readOnly: true },
                         restore: { show: true },
                         saveAsImage: { show: true }
                     }
                 },
-                // dataRange: {
-                //     realtime: false,
-                //     itemHeight: 80,
-                //     //splitNumber:6,
-                //     //borderWidth:1, 
-                //     textStyle: { color: '#333333' },
-                //     text: ['高', '低'],
-                //     calculable: true
-                // },
                 visualMap: {
                     text: ['高', '低'],
                     realtime: false,
@@ -90,30 +82,38 @@ define(function(require, exports, module) {
                     // }
                 },
                 series: [{
-                    id:'thmmap',
-                    // type: 'map',
-                    // mapType: 'china',
-                    roam: true,
-                    center: [109.5, 28],
-                    zoom: 1.5,
-                    itemStyle: {
-                        normal: {
-                            borderColor: 'rgba(100,149,237,1)',
-                            borderWidth: 0.5,
-                            areaStyle: {
-                                color: '#9ec7f3'
+                        id: 'thmmap',
+                        // type: 'map',
+                        // mapType: 'china',
+                        // coordinateSystem: 'bmap',
+                        roam: true,
+                        center: [109.5, 28],
+                        zoom: 5,
+                        itemStyle: {
+                            normal: {
+                                borderColor: 'rgba(100,149,237,1)',
+                                borderWidth: 0.5,
+                                areaStyle: {
+                                    color: '#9ec7f3'
+                                },
+                                label: { show: false, textStyle: { color: '#439f55', fontSize: 12, fontFamily: 'Microsoft YaHei' } }
                             },
-                            label: { show: false, textStyle: { color: '#439f55', fontSize: 12, fontFamily: 'Microsoft YaHei' } }
+                            emphasis: {
+                                areaStyle: {
+                                    color: '#feda9d'
+                                },
+                                label: { show: true, textStyle: { color: '#439f55', fontSize: 12, fontFamily: 'Microsoft YaHei' } }
+                            }
                         },
-                        emphasis: {
-                            areaStyle: {
-                                color: '#feda9d'
-                            },
-                            label: { show: true, textStyle: { color: '#439f55', fontSize: 12, fontFamily: 'Microsoft YaHei' } }
-                        }
+                        // data:[
+                        //     { name: '河南', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } }, emphasis: { show: true, textStyle: { color: '#439f55' } } } },
+                        // ],
+                        zlevel: 9
                     }
-                }]
+
+                ]
             };
+
             this.chart.option = {
                 backgroundColor: '#fff',
                 animation: true,
@@ -184,29 +184,120 @@ define(function(require, exports, module) {
                 }]
             };
         },
+        initScatterOpt: function(geoCoordMap, data) {
+            var self = this;
+            this.scatter = {};
+            var array = [];
+            var maxVal = 1;
+            var convertData = function(data) {
+                var res = [];
+                for (var i = 0; i < data.length; i++) {
+                    var geoCoord = geoCoordMap[data[i].name];
+                    if (geoCoord) {
+                        res.push({
+                            name: data[i].name,
+                            value: geoCoord.concat(data[i].value)
+                        });
+                    }
+                }
+                return res;
+            };
+            console.info(geoCoordMap);
+            console.info(data);
+            console.info(convertData(data));
+            if (data.length != 0) {
+                for (var i = 0; i < data.length; i++) {
+                    if(data[i].value)  array.push(data[i].value);
+                }
+                maxVal = Math.max.apply(null, array);
+            }
+            this.scatter.option = {
+                backgroundColor: '#fff',
+                animation: true,
+                animationDuration: 1000,
+                animationEasing: 'cubicInOut',
+                animationDurationUpdate: 1000,
+                animationEasingUpdate: 'cubicInOut',
+                title: {
+                    x: 'center',
+                    y: 'top'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}'
+                },
+                geo: {
+                    map: 'china',
+                    label: {
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    roam: true,
+                    itemStyle: {
+                        normal: {
+                            areaColor: '#323c48',
+                            borderColor: '#111'
+                        },
+                        emphasis: {
+                            areaColor: '#2a333d'
+                        }
+                    }
+                },
+                series: [{
+                    name: 'value',
+                    type: 'scatter',
+                    coordinateSystem: 'geo',
+                    data: convertData(data),
+                    symbolSize: function(val) {
+                        val = val ? val : 0;
+                        console.info(val);
+                        return (val / maxVal) * 20;
+
+                    },
+                    label: {
+                        normal: {
+                            formatter: '{b}',
+                            position: 'right',
+                            show: true
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#ddb926'
+                        }
+                    }
+                }]
+            };
+        },
         initChart: function(type) {
             var self = this;
-
             if (type == 'theme') {
-                var option = this.thm.option;
-                $.get('/cjeb/common/jslib/publib/echarts/cjeb.json', function(cjebJson) {
+                var option1 = this.thm.option;
+                $.get('./common/jslib/publib/echarts/cjeb_china.json', function(cjebJson) {
                     echarts.registerMap('cjeb', cjebJson);
 
                     self.myChart.setOption({
                         series: {
-                            id:'thmmap',
+                            id: 'thmmap',
                             type: 'map',
                             map: 'cjeb'
                         }
                     });
-                    if (option && typeof option === "object") {
-                        self.myChart.setOption(option);
+                    if (option1 && typeof option1 === "object") {
+                        self.myChart.setOption(option1);
                     }
                 });
+            } else if (type == 'scatter') {
+                var option2 = this.scatter.option;
+                this.myChart.setOption(option2);
+
             } else {
-                var option = this.chart.option;
-                // this.myChart.clear();
-                this.myChart.setOption(option);
+                var option3 = this.chart.option;
+                this.myChart.setOption(option3);
             }
         },
         show: function() {
@@ -219,9 +310,13 @@ define(function(require, exports, module) {
             var mainId = this.getmainwinId();
             $('#' + mainId).hide();
         },
-        arrowshow: function() {
+        arrowshow: function(type) {
             var arrowId = this.getarrowId();
-            $('#' + arrowId).attr({ 'title': '切换至历年变化折线图', 'to': 'line' }).css('background', 'url(modules/charts/imgs/arrow_right.png) no-repeat').show('slow');
+            if (type == 'theme') {
+                $('#' + arrowId).attr({ 'title': '切换至散点图', 'to': 'scatter' }).css('background', 'url(modules/charts/imgs/arrow_right.png) no-repeat').show('slow');
+            } else {
+                $('#' + arrowId).attr({ 'title': '切换至历年变化折线图', 'to': 'line' }).css('background', 'url(modules/charts/imgs/arrow_right.png) no-repeat').show('slow');
+            }
         },
         arrowhide: function() {
             var arrowId = this.getarrowId();
@@ -261,6 +356,7 @@ define(function(require, exports, module) {
             }
             return max;
         },
+
         /**
          * [_proRst4map ]
          * @param  {[Object]} rst  [数据库查询(字段查询)结果:queryResult]
@@ -272,7 +368,7 @@ define(function(require, exports, module) {
          */
         _proRst4map: function(rst, ind, karr, unit, type) {
             var self = this;
-            var option = self.thm.option;
+            var option = type == "theme" ? self.thm.option : self.scatter.option;
             var v_inx = karr[1];
             var data = [],
                 value = [];
@@ -292,47 +388,51 @@ define(function(require, exports, module) {
                 var s = obj.name;
                 data.push(obj);
             }
+            var otherProv = [{ name: '河南', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '河北', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '陕西', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '广东', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '广西', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '山东', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '山西', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '北京', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '天津', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '黑龙江', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '吉林', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '辽宁', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '新疆', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '内蒙古', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '西藏', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '青海', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '甘肃', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '宁夏', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '福建', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '台湾', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '海南', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+                { name: '南海诸岛', itemStyle: { normal: { areaColor: '#fff' } }, label: { normal: { show: false, textStyle: { color: '#337ab7' } } } },
+            ];
+            [].push.apply(data, otherProv);
             console.log(data);
             option.series[0].data = data;
             option.series[0].name = ind;
-            if (value.length != 0) {
-                var min = util.minval(value),
-                    max = util.maxval(value);
-                // option.visualMap.inRange.color = ['#F08080', '#f1f075', '#8acff2'];
-                option.visualMap.min = self._getmin4thm(min);
-                option.visualMap.max = self._getmax4thm(max);
-                /*self.myChart.setOption({
-                    visualMap: {
-                        min: self._getmin4thm(min),
-                        max: self._getmax4thm(max),
-                        inRange: {
-                            color: ['#F08080', '#f1f075', '#8acff2']
-                        }
-                    },
-                    // series:{
-                    //     id:'thmmap',
-                    //     name:ind,
-                    //     data:data
-                    // }
-                });*/
-            } else {
-                // option.visualMap.inRange.color = ['#e5e5e5', '#e5e5e5', '#e5e5e5'];
-                option.visualMap.min = 0;
-                option.visualMap.max = 0;
-                /*self.myChart.setOption({
-                    visualMap: {
-                        min: 0,
-                        max: 0,
-                        inRange: {
-                            color: ['#e5e5e5', '#e5e5e5', '#e5e5e5']
-                        }
-                    }
-                });*/
-                util.showTipWin('暂未提供数据');
+            if (type == "theme") {
+                if (value.length != 0) {
+                    var min = util.minval(value),
+                        max = util.maxval(value);
+                    // option.visualMap.inRange.color = ['#F08080', '#f1f075', '#8acff2'];
+                    option.visualMap.min = self._getmin4thm(min);
+                    option.visualMap.max = self._getmax4thm(max);
+                } else {
+                    // option.visualMap.inRange.color = ['#e5e5e5', '#e5e5e5', '#e5e5e5'];
+                    option.visualMap.min = 0;
+                    option.visualMap.max = 0;
+
+                    util.showTipWin('暂未提供数据');
+                }
             }
             option.tooltip.formatter = function(params) {
                 // console.log(params);
-                if (typeof params.value == 'number'&& !isNaN(params.value)) {
+                if (typeof params.value == 'number' && !isNaN(params.value)) {
                     if (params.value != '') {
                         var value = (params.value.toFixed(2) + '').split('.');
                         var decimal = value[1] ? '.' + value[1][0] + value[1][1] : '';
@@ -346,7 +446,7 @@ define(function(require, exports, module) {
                 }
             };
             self._adjustMap4lowres();
-            self.initChart('theme');
+            self.initChart(type);
         },
         _proRst4chart: function(rst, ind, karr, unit, type) {
 
@@ -420,7 +520,13 @@ define(function(require, exports, module) {
                 "tablename": tab,
                 "filter": filter
             };
-            var succ = type == 'theme' ? self._proRst4map : self._proRst4chart;
+            var succ;
+            if (type === 'theme' || type === 'scatter') {
+                succ = self._proRst4map;
+            } else {
+                succ = self._proRst4chart;
+            }
+
             var sqlservice = new gEcnu.WebsqlScript({
                 'processCompleted': function(data) {
                     var queryResult = data.queryResult;
@@ -438,7 +544,14 @@ define(function(require, exports, module) {
             this.myChart = echarts.init(dom);
             this.myChart.showLoading();
             this.myChart.hideLoading();
-            this.initOpt();
+            if (type === 'scatter') {
+                console.log(dataStorage.geoCoordMap);
+                console.log(dataStorage.citysVal);
+                var callbackFuc = this.initScatterOpt(dataStorage.geoCoordMap, dataStorage.citysVal);
+                // charts.trigger('getDBData', callbackFuc);
+            } else {
+                this.initOpt();
+            }
 
             console.log(ind + ' ' + year_cnty + ' ' + table + ' ' + type);
             if (type == 'line') {
@@ -447,11 +560,14 @@ define(function(require, exports, module) {
             } else {
                 self.year = year_cnty || '2008';
                 if (!year_cnty) year_cnty = '2008';
-                if (type == 'bar') {
-                    self.arrowshow();
-                } else {
-                    self.arrowhide();
-                }
+                // if (type == 'bar') {
+                //     self.arrowshow();
+                // } else {
+                //     self.arrowhide();
+                // }
+            }
+            if (type === 'bar' || type === 'theme') {
+                self.arrowshow(type);
             }
             self.ind = ind, self.tab = table;
             var tab = 'fieldsdef'; //查询出表中每列代表的含义
@@ -493,27 +609,43 @@ define(function(require, exports, module) {
             var sub_year_cntyId = this.getsubyearcntyId();
             var cnty = this.cnty,
                 year = this.year;
-            if (toType == 'line') {
-                // var len = cnty.length;
-                // var state = len > 5 ? '城市:' : (len == 5 && $(window).width() <= 1200) ? '城市:' : '城 市：';
-                this.trigger('initbox', '城市');
-                // $('#' + chartId).css('width', 0).animate({ width: width_ct });
-                $('#' + boxId).css('width', 0).animate({ width: width_box });
-                $(root).attr({ 'title': '切换回柱状图', 'to': 'bar' }).css('background', 'url(modules/charts/imgs/arrow_left.png) no-repeat');
-                $('#' + sub_year_cntyId).attr('type', '城市').text(cnty).prev().text('城 市:');
-                $('#' + subTabId).children('.select').eq(0).attr('type', 'line');
-            } else {
-                this.trigger('initbox', '年份');
-                var chartDom = document.getElementById(chartId);
-                var boxDom = document.getElementById(boxId);
-                var left_ct = chartDom.offsetLeft;
-                var left_box = boxDom.offsetLeft;
-                // $('#' + chartId).css({ 'left': left_ct, 'width': 0 }).animate({ width: width_ct });
-                $('#' + boxId).css({ 'left': left_box, 'width': 0 }).animate({ width: width_box });
-                $(root).attr({ 'title': '切换至历年变化折线图', 'to': 'line' }).css('background', 'url(modules/charts/imgs/arrow_right.png) no-repeat');
-                $('#' + sub_year_cntyId).attr('type', '年份').text(year + '年').prev().text('年 份：');
-                $('#' + subTabId).children('.select').eq(0).attr('type', 'bar');
+            var chartDom = document.getElementById(chartId);
+            var boxDom = document.getElementById(boxId);
+            var left_ct = chartDom.offsetLeft;
+            var left_box = boxDom.offsetLeft;
+            r = root;
+            switch (toType) {
+                case 'line':
+                    this.trigger('initbox', '城市');
+                    // $('#' + chartId).css('width', 0).animate({ width: width_ct });
+                    $('#' + boxId).css('width', 0).animate({ width: width_box });
+                    $(root).attr({ 'title': '切换回柱状图', 'to': 'bar' }).css('background', 'url(modules/charts/imgs/arrow_left.png) no-repeat');
+                    $('#' + sub_year_cntyId).attr('type', '城市').text(cnty).prev().text('城 市:');
+                    $('#' + subTabId).children('.select').eq(0).attr('type', 'line');
+                    break;
+                case 'bar':
+                    this.trigger('initbox', '年份');
+                    $('#' + boxId).css({ 'left': left_box, 'width': 0 }).animate({ width: width_box });
+                    $(root).attr({ 'title': '切换至历年变化折线图', 'to': 'line' }).css('background', 'url(modules/charts/imgs/arrow_right.png) no-repeat');
+                    $('#' + sub_year_cntyId).attr('type', '年份').text(year + '年').prev().text('年 份：');
+                    $('#' + subTabId).children('.select').eq(0).attr('type', 'bar');
+                    break;
+                case 'theme':
+                    this.trigger('initbox', '年份');
+                    $('#' + boxId).css({ 'left': left_box, 'width': 0 }).animate({ width: width_box });
+                    $(root).attr({ 'title': '切换至散点专题图', 'to': 'scatter' }).css('background', 'url(modules/charts/imgs/arrow_right.png) no-repeat');
+                    $('#' + sub_year_cntyId).attr('type', '年份').text(year + '年').prev().text('年 份：');
+                    $('#' + subTabId).children('.select').eq(0).attr('type', 'theme');
+                    break;
+                case 'scatter':
+                    this.trigger('initbox', '年份');
+                    $('#' + boxId).css({ 'left': left_box, 'width': 0 }).animate({ width: width_box });
+                    $(root).attr({ 'title': '切换至颜色专题图', 'to': 'theme' }).css('background', 'url(modules/charts/imgs/arrow_left.png) no-repeat');
+                    $('#' + sub_year_cntyId).attr('type', '年份').text(year + '年').prev().text('年 份：');
+                    $('#' + subTabId).children('.select').eq(0).attr('type', 'scatter');
+                    break;
             }
+
         },
         getMapId: function() {
             return 'mapview';
@@ -548,7 +680,7 @@ define(function(require, exports, module) {
 
     };
 
-    $('#toggle_logo').on('click', function() {
+    $('.toggle_logo').on('click', function() {
         var ind = charts.ind;
         var tab = charts.tab;
         var year = charts.year;
@@ -556,12 +688,17 @@ define(function(require, exports, module) {
         var toType = $(this).attr('to');
         console.log(year + ' ' + cnty + ' ' + toType);
         charts.toggle4chart(this);
-        if (toType == 'line') {
-            charts.addval2chart(ind, cnty, tab, toType);
-        } else {
-            charts.addval2chart(ind, year, tab, toType);
-        }
 
+        switch (toType) {
+            case 'line':
+                charts.addval2chart(ind, cnty, tab, toType);
+                break;
+            case 'bar':
+            case 'scatter':
+            case 'theme':
+                charts.addval2chart(ind, year, tab, toType);
+                break;
+        }
     });
 
     module.exports = charts;

@@ -37,17 +37,17 @@
      */
     
 
-    // $.get('/cjeb/common/jslib/publib/echarts/map/china.json', function(chinaJson) {
-    //     echarts.registerMap('china', chinaJson);
-    //     var chart = echarts.init(document.getElementById('main'));
-    //     chart.setOption({
-    //         series: [{
-    //             type: 'map',
-    //             map: 'china'
-    //         }]
-    //     });
-    // });
-    var chart = echarts.init(document.getElementById('main'));
+    $.get('../common/jslib/publib/echarts/map/hainan.json', function(chinaJson) {
+        echarts.registerMap('china', chinaJson);
+        var chart = echarts.init(document.getElementById('main'));
+        chart.setOption({
+            series: [{
+                type: 'map',
+                map: 'china'
+            }]
+        });
+    });
+    /*var chart = echarts.init(document.getElementById('main'));
     chart.setOption({
         series: [{
             type: 'map',
@@ -85,7 +85,7 @@
                 map: 'jiangsu'
             }]
         });
-    });
+    });*/
     </script>
 </body>
 

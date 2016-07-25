@@ -43,6 +43,7 @@ define(function(require) {
     subTitleMod.addCustomEvt.on('dataclick', datamgrMod_dataclick);
     indlistMod.addCustomEvt.on('indclick', indlistMod_indclick);
     chartsMod.addCustomEvt.on('initbox', chartsMod_initbox);
+    // chartsMod.addCustomEvt.on('getDBData', chartsMod_getDBData);
 
     navMod.init(); //主要是登录和注册
     mapviewMod.init();
@@ -96,7 +97,9 @@ define(function(require) {
     function chartsMod_initbox(type) {
         subTitleMod.initbox(type);
     }
-
+    // function chartsMod_getDBData(callbackFuc){
+    //     intermapMod.getDBData(gl_tab,gl_ind,gl_year,callbackFuc);
+    // }
     function modelMod_modelclick() {
         modelMod.init();
     }
