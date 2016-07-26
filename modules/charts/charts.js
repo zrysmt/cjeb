@@ -363,11 +363,11 @@ define(function(require, exports, module) {
             var option = self.thm.option;
             if ($(window).width() <= 1200) {
                 option.visualMap.itemHeight = 8;
-                var loc = option.series[0].mapLocation;
-                loc.x = -440;
-                loc.y = -40;
-                loc.height = 1000;
-                loc.width = 1000;
+                // var loc = option.series[0].mapLocation;
+                // loc.x = -440;
+                // loc.y = -40;
+                // loc.height = 1000;
+                // loc.width = 1000;
             }
         },
         _getmin4thm: function(val) {
@@ -703,7 +703,6 @@ define(function(require, exports, module) {
             var boxDom = document.getElementById(boxId);
             var left_ct = chartDom.offsetLeft;
             var left_box = boxDom.offsetLeft;
-            r = root;
             switch (toType) {
                 case 'line':
                     this.trigger('initbox', '城市');
@@ -722,14 +721,12 @@ define(function(require, exports, module) {
                     break;
                 case 'theme':
                     this.trigger('initbox', '年份');
-                    $('#' + boxId).css({ 'left': left_box, 'width': 0 }).animate({ width: width_box });
                     $(root).attr({ 'title': '切换至散点专题图', 'to': 'scatter' }).css('background', 'url(modules/charts/imgs/arrow_right.png) no-repeat');
                     $('#' + sub_year_cntyId).attr('type', '年份').text(year + '年').prev().text('年 份：');
                     $('#' + subTabId).children('.select').eq(0).attr('type', 'theme');
                     break;
                 case 'scatter':
                     this.trigger('initbox', '年份');
-                    $('#' + boxId).css({ 'left': left_box, 'width': 0 }).animate({ width: width_box });
                     $(root).attr({ 'title': '切换至颜色专题图', 'to': 'theme' }).css('background', 'url(modules/charts/imgs/arrow_left.png) no-repeat');
                     $('#' + sub_year_cntyId).attr('type', '年份').text(year + '年').prev().text('年 份：');
                     $('#' + subTabId).children('.select').eq(0).attr('type', 'scatter');

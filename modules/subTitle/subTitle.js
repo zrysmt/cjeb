@@ -156,11 +156,12 @@ define(function (require, exports, module){
 		year = year.substring(0,year.length-1);
 		subTitle.year = year;
 		subTitle.closebox(flag);
+
 		subTitle.trigger('yearOrcntyClick',year,type);
 	});
 
 	$('#cntylist').on('click','.year_cnty_Item',function(){
-		var type = 'line';
+		var type = $('#subTab .select').eq(0).attr('type');
 		var flag = '城市';
 		var cnty = $(this).text();
 		subTitle.cnty = cnty;
@@ -173,6 +174,15 @@ define(function (require, exports, module){
 		$('.subTab').removeClass('select');
 		$(this).addClass('select');
 		var year = subTitle.year;
+		var cnty = subTitle.cnty;
+		var mainboxId = subTitle.getmainboxId();
+		var subYearcntyId = subTitle.getsubyear_cntyId();
+		// if(('#'+mainboxId).attr('type')=='城市'){
+		if($('#sub_year_cnty').attr('rember')=='city'){
+			cnty_year = cnty;
+		}else{
+			cnty_year = year;
+		}
 		var type = '年份';
 		switch($(this).text()){
 			case '交互地图':
@@ -186,12 +196,12 @@ define(function (require, exports, module){
 				break;
 			case '图表展示':
 				// $(this).attr('type','bar');
-				// subTitle.initbox(type);
+				subTitle.initbox(type);
 				subTitle.trigger('yearOrcntyClick',year,'bar');
 				break;
 			case '数据管理':
 				subTitle.initbox(type);
-				subTitle.trigger('dataclick');
+				subTitle.trigger('yearOrcntyClick',cnty_year,'datamgr');
 				break;
 		}
 	});

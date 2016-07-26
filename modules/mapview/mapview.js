@@ -112,7 +112,7 @@ define(function(require, exports, module) {
                     return params.name;
                 }
             };
-            if ($(window).width() <= 1200) {
+            if ($(window).width() <= 1000) {
                 var loc = self.option.series[0].mapLocation;
                 loc.x = -880;
                 loc.y = -158;

@@ -38,11 +38,10 @@ define(function(require) {
 
     menuListMod.addCustomEvt.on('menuclick', menuListMod_menuclick);
     subTitleMod.addCustomEvt.on('yearOrcntyClick', subTitleMod_yearOrcntyClick);
-    // subTitleMod.addCustomEvt.on('intermapclick', intermapMod_intermapClick);
-    subTitleMod.addCustomEvt.on('modelclick', modelMod_modelclick);
-    subTitleMod.addCustomEvt.on('dataclick', datamgrMod_dataclick);
+    // subTitleMod.addCustomEvt.on('modelclick', modelMod_modelclick);
     indlistMod.addCustomEvt.on('indclick', indlistMod_indclick);
     chartsMod.addCustomEvt.on('initbox', chartsMod_initbox);
+    datamgrMod.addCustomEvt.on('initbox', datamgrMod_initbox);
     // chartsMod.addCustomEvt.on('getDBData', chartsMod_getDBData);
 
     navMod.init(); //主要是登录和注册
@@ -72,8 +71,10 @@ define(function(require) {
         if ($('#mainwin').is(':hidden')) chartsMod.show();
         if (type == 'intermap') {
             console.log('选择年份');
-            intermapMod.renderInteractMap(gl_tab,gl_ind,year_cnty);
+            intermapMod.renderInteractMap(gl_tab, gl_ind, year_cnty);
             // intermapMod.init();
+        } else if (type == 'datamgr') {
+            datamgrMod.init(gl_tab,year_cnty);
         } else {
             chartsMod.addval2chart(gl_ind, year_cnty, gl_tab, type);
         }
@@ -84,28 +85,22 @@ define(function(require) {
         gl_tab = tab;
         var year_cnty = type == 'line' ? gl_cnty : gl_year;
         if (type == 'intermap') {
-            intermapMod.renderInteractMap(gl_tab,gl_ind,year_cnty);
-        }else{
+            intermapMod.renderInteractMap(gl_tab, gl_ind, year_cnty);
+        } else {
             chartsMod.addval2chart(indName, year_cnty, tab, type);
         }
     }
 
-    // function intermapMod_intermapClick() {
-    //     intermapMod.renderInteractMap(gl_tab,gl_ind,gl_year);
-    // }
-
     function chartsMod_initbox(type) {
         subTitleMod.initbox(type);
     }
-    // function chartsMod_getDBData(callbackFuc){
-    //     intermapMod.getDBData(gl_tab,gl_ind,gl_year,callbackFuc);
+    
+    function datamgrMod_initbox(type){
+        subTitleMod.initbox(type);
+    }
+    // function modelMod_modelclick() {
+    //     modelMod.init(); //模型暂时不做
     // }
-    function modelMod_modelclick() {
-        modelMod.init();
-    }
 
-    function datamgrMod_dataclick() {
-        datamgrMod.init();
-    }
 
 });

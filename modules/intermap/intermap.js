@@ -582,7 +582,7 @@ define(function(require, exports, module) {
             var sqlservice = new gEcnu.WebSQLServices.SQLServices({
                 'processCompleted': function(data) {
                     if (data.length && data.length !== 0) {
-                        console.log(data);
+                        // console.log(data);
                         util.bindContext(self, succ, data, ind, year, table);
                     }
                 },
