@@ -1,11 +1,7 @@
 #mapview {
     position: absolute;
     width: 100%;
-    /*left: 10%;*/
-    /*top: 128px;*/
-    /*bottom: 88px;*/
     height: 85%;
-    /*min-height: 550px;*/
-    overflow: hidden;
-    /*background-color: #71b7fd;*/
+    /*overflow: hidden;*/
+    background-color: #71b7fd;
 }

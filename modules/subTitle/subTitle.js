@@ -175,10 +175,9 @@ define(function (require, exports, module){
 		$(this).addClass('select');
 		var year = subTitle.year;
 		var cnty = subTitle.cnty;
-		var mainboxId = subTitle.getmainboxId();
 		var subYearcntyId = subTitle.getsubyear_cntyId();
 		// if(('#'+mainboxId).attr('type')=='城市'){
-		if($('#sub_year_cnty').attr('rember')=='city'){
+		if($('#'+subYearcntyId).attr('rember')=='city'){
 			cnty_year = cnty;
 		}else{
 			cnty_year = year;

@@ -14,7 +14,6 @@ define(function(require, exports, module) {
             // var ec = require('echarts');
             var mapId = this.getMapId();
             var dom = document.getElementById(mapId);
-            console.log(echarts);
             // this.myChart = ec.init(dom).showLoading({effect:'bubble'}).hideLoading();
             this.myChart = echarts.init(dom);
             this.myChart.showLoading();
@@ -99,6 +98,13 @@ define(function(require, exports, module) {
         },
         initMap: function() {
             var option = this.option;
+            //  if ($(window).width() <= 1000) {
+            //     var loc = option.series[0].mapLocation;
+            //     loc.x = -880;
+            //     loc.y = -158;
+            //     loc.height = 1800;
+            //     loc.width = 1800;
+            // }
             this.myChart.setOption(option);
         },
         showStasInfo: function(provInfo) {
@@ -112,13 +118,7 @@ define(function(require, exports, module) {
                     return params.name;
                 }
             };
-            if ($(window).width() <= 1000) {
-                var loc = self.option.series[0].mapLocation;
-                loc.x = -880;
-                loc.y = -158;
-                loc.height = 1800;
-                loc.width = 1800;
-            }
+           
             this.initMap();
         },
         _getProvInfoByName: function(provInfo, pName) {

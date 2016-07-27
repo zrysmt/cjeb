@@ -1,4 +1,6 @@
-
+#menu{
+    height: 38px;
+}
 .menu {
     display: inline-block;
     height: 100%;

@@ -257,7 +257,7 @@ var util = {
                 var relativeY = ((e.pageY - offset.top) * multiplier) - (origHeight * multiplier);
                 if (relativeY > origHeight) {
                     list.css("top", -relativeY + origHeight);
-                };
+                }
             });
         } else {
             container.css('height', list.height() + 4);
@@ -301,7 +301,7 @@ var util = {
                     if (method && !dest[method]) {
                         dest[method] = src[method];
                     }
-                };
+                }
                 continue;
             }
             for (var prop in src) {
@@ -309,7 +309,7 @@ var util = {
                     dest[prop] = src[prop];
                 }
             }
-        };
+        }
     },
     fldsArrTostring: function(arr) {
         var fields = '';
@@ -319,7 +319,7 @@ var util = {
             } else {
                 fields += "," + '[' + arr[i] + ']';
             }
-        };
+        }
         return fields;
     },
     getCurrentStyle: function() {
@@ -337,7 +337,7 @@ var util = {
         for (var i = 0; i < arr.length - 1; i++) {
             var minval = Math.min(arr[i], arr[i + 1]);
             if (minval < min) min = minval;
-        };
+        }
         return min;
     },
     maxval: function(arr) {
@@ -346,7 +346,7 @@ var util = {
         for (var i = 0; i < arr.length - 1; i++) {
             var maxval = Math.max(arr[i], arr[i + 1]);
             if (maxval > max) max = maxval;
-        };
+        }
         return max;
     },
     showTipWin: function(tipmsg) {

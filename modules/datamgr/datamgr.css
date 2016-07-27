@@ -4,8 +4,12 @@
 	padding: 15px;
 	margin:  0 auto;
 	margin-top: 10px;
+    min-height: 460px;
 }
 
+#datamgr_table{
+   width: 100%; 
+}
 #datamgr_table th,
 #datamgr_table tr{
 	font-size: 14px;
@@ -16,7 +20,7 @@
     /*display: none;*/
     position: absolute;
     right: 10px;
-    top: 50%;
+    top: 48%;
     width: 14px;
     height: 23px;
     background: url(../charts/imgs/arrow_right.png) no-repeat;

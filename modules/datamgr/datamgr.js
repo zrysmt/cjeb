@@ -7,8 +7,8 @@ define(function(require, exports, module) {
             if (toType == 'cityTab') {
                 this.year = cnty_year;
                 type = 'yearTab';
-            } else if(toType == 'yearTab'){
-            	cnty_year =cnty_year?cnty_year:'上海市';
+            } else if (toType == 'yearTab') {
+                cnty_year = cnty_year ? cnty_year : '上海市';
                 this.cnty = cnty_year;
                 type = 'cityTab';
             }
@@ -23,10 +23,11 @@ define(function(require, exports, module) {
             $('.' + winclass).hide();
             $('#' + datamgrId).show();
 
+            /*初始化显示是时间选择？还是城市选择*/
             var toType = $('.toggle_datamgr').attr('to');
             var sub_year_cntyId = this.getsubyearcntyId();
-            var cnty = this.cnty||'上海市',
-                year = this.year||2008;
+            var cnty = this.cnty || '上海市',
+                year = this.year || 2008;
             console.log(toType);
             switch (toType) {
                 case 'yearTab':
@@ -94,13 +95,17 @@ define(function(require, exports, module) {
                         "sSortDescending": ": 以降序排列此列"
                     }
                 },
-                // dom: 'Bfrtip', //B指的是button
-                buttons: ['excel'],
+                dom: 'Bflrtip', //B指的是button
+                buttons: ['excel', 'pdf'],
                 data: tData,
                 columns: thName,
                 "destroy": true
             });
-
+            table.on('draw', function() {
+                var h = $('.maintenance').height();
+                $('#foot').css('top', h + 240);
+                // $('#foot').css('display', 'none');
+            });
 
         },
         _getTableData: function(fieldsData, cnty_year, table, type) {
@@ -108,20 +113,23 @@ define(function(require, exports, module) {
             var filter = '';
             if (type == 'yearTab') {
                 filter = "V4 =" + cnty_year;
-            }else {
-                filter = "V2 ='" + cnty_year+"'";
+            } else {
+                filter = "V2 ='" + cnty_year + "'";
             }
             console.log(type);
             console.log(filter);
             var sqlservice = new gEcnu.WebSQLServices.SQLServices({
                 'processCompleted': function(data) {
-                	console.log(data);
+                    console.log(data);
                     if (data.length && data.length !== 0) {
                         self.initDataTable(fieldsData, data);
+                    } else {
+                        util.showTipWin('暂未提供数据');
+                        $('#datamgr_table').DataTable({ data: {}, "destroy": true });
                     }
                 },
                 'processFailed': function() {
-                    console.log('query error');
+                    console.error('query error');
                 }
             });
             var sql = {
@@ -142,6 +150,9 @@ define(function(require, exports, module) {
                     if (data.length && data.length !== 0) {
                         console.log(data);
                         util.bindContext(self, succ, data, cnty_year, table, type);
+                    } else {
+                        util.showTipWin('暂未提供数据');
+                        $('#datamgr_table').DataTable({ data: {}, "destroy": true });
                     }
                 },
                 'processFailed': function() {
@@ -162,22 +173,22 @@ define(function(require, exports, module) {
             $('#' + boxId).css('left', 'initial');
             var width_box = $('#' + boxId).css('width');
             var sub_year_cntyId = this.getsubyearcntyId();
-            var cnty = this.cnty||'上海市',
-                year = this.year||2008;
+            var cnty = this.cnty || '上海市',
+                year = this.year || 2008;
             var boxDom = document.getElementById(boxId);
             var left_box = boxDom.offsetLeft;
             console.log(toType);
             switch (toType) {
                 case 'cityTab':
                     this.trigger('initbox', '城市');
-                    $('#' + sub_year_cntyId).attr({'type':'城市','rember':'city'}).text(cnty).prev().text('城 市:');
+                    $('#' + sub_year_cntyId).attr({ 'type': '城市', 'rember': 'city' }).text(cnty).prev().text('城 市:');
                     $('#' + boxId).css('width', 0).animate({ width: width_box });
                     $(root).attr({ 'title': '切换回按照年份查看', 'to': 'yearTab' }).css('background', 'url(modules/charts/imgs/arrow_left.png) no-repeat');
                     // $('#' + subTabId).children('.select').eq(0).attr('type', 'datamgr');
                     break;
                 case 'yearTab':
                     this.trigger('initbox', '年份');
-                    $('#' + sub_year_cntyId).attr({'type':'年份','rember':'year'}).text(year + '年').prev().text('年 份：');
+                    $('#' + sub_year_cntyId).attr({ 'type': '年份', 'rember': 'year' }).text(year + '年').prev().text('年 份：');
                     $('#' + boxId).css({ 'left': left_box, 'width': 0 }).animate({ width: width_box });
                     $(root).attr({ 'title': '切换至历年变化折线图', 'to': 'cityTab' }).css('background', 'url(modules/charts/imgs/arrow_right.png) no-repeat');
                     // $('#' + subTabId).children('.select').eq(0).attr('type', 'datamgr');
@@ -199,8 +210,8 @@ define(function(require, exports, module) {
         getsubTabId: function() {
             return 'subTab';
         },
-        getFootId:function(){
-        	return 'foot';
+        getFootId: function() {
+            return 'foot';
         }
 
     };
@@ -211,8 +222,8 @@ define(function(require, exports, module) {
         var cnty = datamgr.cnty;
         var toType = $(this).attr('to');
 
-        datamgr.toggle4table(this,toType);
-            console.info(toType);
+        datamgr.toggle4table(this, toType);
+        console.info(toType);
 
         switch (toType) {
             case 'cityTab':
