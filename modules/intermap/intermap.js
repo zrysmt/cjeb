@@ -122,7 +122,7 @@ define(function(require, exports, module) {
             var self = this;
             var maxVal = 1;
             var valArray = [];
-
+            unit = unit&&unit!='null'?unit:'';
             this.initOpt();//option
             if(convertedData.length!=0){
                 for (var i = 0; i < convertedData[0].length; i++) {
@@ -131,7 +131,7 @@ define(function(require, exports, module) {
                 maxVal = Math.max.apply(null, valArray);
             }
             this.option.series.push({
-                name: '长江经济带城市',
+                // name: '长江经济带城市',
                 type: 'scatter',
                 coordinateSystem: 'geo',
                 data: convertedData[0],
@@ -420,8 +420,7 @@ define(function(require, exports, module) {
                     var rawIndex = mainSeries.dataIndex[i];
                     var dataItem = convertedData[0][rawIndex];
                     var pmValue = dataItem.value[2];
-
-                    sum += pmValue;
+                    sum += parseInt(pmValue);
                     count++;
 
                     selectedItems.push(dataItem);

@@ -50,7 +50,7 @@ define(function(require, exports, module) {
             var len = fieldsData.length;
             thName.push({ title: 'ID', data: 'ID' });
             for (var i = 0; i < len; i++) {
-                if (!fieldsData[i].UNIT) {
+                if (!fieldsData[i].UNIT||fieldsData[i].UNIT=='null') {
                     thName.push({ title: fieldsData[i].FIELDREALNAME, data: fieldsData[i].FIELDREALNAME });
                 } else {
                     thName.push({ title: fieldsData[i].FIELDREALNAME + '(' + fieldsData[i].UNIT + ')', data: fieldsData[i].FIELDREALNAME + '(' + fieldsData[i].UNIT + ')' });
@@ -59,8 +59,10 @@ define(function(require, exports, module) {
             for (var j = 0; j < data.length; j++) {
                 var obj = '{';
                 var index = 0;
+                var datajk='';
                 for (var k in data[j]) {
-                    obj += '"' + thName[index].data + '":"' + data[j][k] + '",';
+                    datajk = data[j][k]&&data[j][k]!='null'?data[j][k]:'';
+                    obj += '"' + thName[index].data + '":"' + datajk + '",';
                     index++;
                 }
                 obj = obj.slice(0, -1) + '}';

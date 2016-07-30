@@ -137,7 +137,7 @@ define(function (require, exports, module){
 	$('.sub_year_cnty_list').hover(function(){
 		subTitle.hoverSty(this);
 		var container = $(this).children('.listDiv');
-        util.mouseoverList(176,container);
+        util.mouseoverList(300,container);
 	},function(){
 		subTitle.normalSty();
 		$('.sub_year_cnty_ul').css('top',0);

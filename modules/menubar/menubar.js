@@ -44,7 +44,7 @@ define(function (require, exports, module){
         $(this).addClass('menuhov');
         menuList.init(root);
         var container = $(this).children('.menuList');
-        util.mouseoverList(160,container); 
+        util.mouseoverList(340,container); 
     }, function() {
         menuList.hide();
         $(this).removeClass('menuhov');

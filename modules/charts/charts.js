@@ -270,7 +270,7 @@ define(function(require, exports, module) {
                     symbolSize: function(val) {
                         val[2] = val[2] ? val[2] : 0;
                         if (val[2])
-                            return Math.max((val[2] / maxVal) * 25, 8);
+                            return Math.max((val[2] / maxVal) * 25, 6);
                         // return 15;
 
                     },

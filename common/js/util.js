@@ -265,7 +265,7 @@ var util = {
         }
     },
     /**
-     * by zry
+     * 注释by zry
      * [bindContext 将context上下文交给func，并传递参数params]
      * @param  {[Object]} context [上下文]
      * @param  {[Function]} fun     [函数]
