@@ -12,7 +12,7 @@ define(function(require, exports, module) {
                 this.cnty = cnty_year;
                 type = 'cityTab';
             }
-            console.info(cnty_year);
+            // console.info(cnty_year);
             this.show();
             this.getFieldsDef(table, cnty_year, type);
         },
@@ -28,7 +28,6 @@ define(function(require, exports, module) {
             var sub_year_cntyId = this.getsubyearcntyId();
             var cnty = this.cnty || '上海市',
                 year = this.year || 2008;
-            console.log(toType);
             switch (toType) {
                 case 'yearTab':
                     this.trigger('initbox', '城市');
@@ -69,8 +68,6 @@ define(function(require, exports, module) {
                 tData.push(JSON.parse(obj));
             }
 
-            console.log(thName);
-            console.log(tData);
             // $('#datamgr_table').DataTable({}).destroy();
             var table = $('#datamgr_table').DataTable({
                 language: {
@@ -118,11 +115,8 @@ define(function(require, exports, module) {
             } else {
                 filter = "V2 ='" + cnty_year + "'";
             }
-            console.log(type);
-            console.log(filter);
             var sqlservice = new gEcnu.WebSQLServices.SQLServices({
                 'processCompleted': function(data) {
-                    console.log(data);
                     if (data.length && data.length !== 0) {
                         self.initDataTable(fieldsData, data);
                     } else {
@@ -150,7 +144,6 @@ define(function(require, exports, module) {
             var sqlservice = new gEcnu.WebSQLServices.SQLServices({
                 'processCompleted': function(data) {
                     if (data.length && data.length !== 0) {
-                        console.log(data);
                         util.bindContext(self, succ, data, cnty_year, table, type);
                     } else {
                         util.showTipWin('暂未提供数据');
@@ -179,7 +172,6 @@ define(function(require, exports, module) {
                 year = this.year || 2008;
             var boxDom = document.getElementById(boxId);
             var left_box = boxDom.offsetLeft;
-            console.log(toType);
             switch (toType) {
                 case 'cityTab':
                     this.trigger('initbox', '城市');
@@ -225,7 +217,6 @@ define(function(require, exports, module) {
         var toType = $(this).attr('to');
 
         datamgr.toggle4table(this, toType);
-        console.info(toType);
 
         switch (toType) {
             case 'cityTab':

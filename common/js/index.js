@@ -70,7 +70,7 @@ define(function(require) {
         }
         if ($('#mainwin').is(':hidden')) chartsMod.show();
         if (type == 'intermap') {
-            console.log('选择年份');
+            // console.log('选择年份');
             intermapMod.renderInteractMap(gl_tab, gl_ind, year_cnty);
             // intermapMod.init();
         } else if (type == 'datamgr') {

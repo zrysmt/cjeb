@@ -328,7 +328,6 @@ define(function(require, exports, module) {
                 });
             } else if (type == 'scatter') {
                 var option2 = this.scatter.option;
-                console.log(option2);
                 this.myChart.setOption(option2);
 
             } else {
@@ -452,7 +451,7 @@ define(function(require, exports, module) {
             option.legend.data[0] = option.series[0].name;*/
             if (type == "theme") {
                 [].push.apply(data, otherProv);
-                console.log(data);
+                // console.log(data);
                 option.series[0].data = data;
                 option.series[0].name = ind;
                 if (value.length != 0) {
@@ -490,7 +489,6 @@ define(function(require, exports, module) {
         _proRst4chart: function(rst, ind, karr, unit, type) {
 
             var self = this;
-            console.info(karr + unit + type);
             var option = self.chart.option;
             var k_inx = 'V2';
             // var magicType = ['bar'];
@@ -510,9 +508,6 @@ define(function(require, exports, module) {
                 if (val != '-') valueArr.push(val);
                 data.push(val);
             }
-            console.log(tmpArr);
-            console.log(data);
-
             option.yAxis[0].type = 'value';
             option.xAxis[0].data = tmpArr;
             option.series[0].type = type;
@@ -540,8 +535,8 @@ define(function(require, exports, module) {
         },
         _parseCitysData: function(cityLocData, ind, fldArr, unit, cityValRst) {
             // console.log(cityLocData);
-            console.log(cityValRst);
-            console.log(fldArr);
+            // console.log(cityValRst);
+            // console.log(fldArr);
             var geoCoordMap = '{';
             for (var i = 0, len = cityLocData.length; i < len; i++) {
                 geoCoordMap += '"' + cityLocData[i].CITYNAME + '":[' + cityLocData[i].LNG + ',' + cityLocData[i].LAT + '],';
@@ -557,12 +552,12 @@ define(function(require, exports, module) {
                 if (!valj || valj == 'null') {
                     valj = 0;
                 }
-                console.info(valj);
+                // console.info(valj);
                 oneCityObj.name = cityValRst[j][fldArr[0]];
                 oneCityObj.value = valj;
                 citysVal.push(oneCityObj);
             }
-            console.log(citysVal);
+            // console.log(citysVal);
 
             this.initScatterOpt(geoCoordMap, citysVal, ind, unit);
         },
@@ -598,7 +593,7 @@ define(function(require, exports, module) {
             } else {
                 filter = "V4 ='" + year_cnty + "'";
             }
-            console.log(filter);
+            // console.log(filter);
 
             var unit = rst[0].UNIT;
             var flds = util.fldsArrTostring(fldArr);
@@ -620,7 +615,7 @@ define(function(require, exports, module) {
             var sqlservice = new gEcnu.WebsqlScript({
                 'processCompleted': function(data) {
                     var queryResult = data.queryResult;
-                    console.log(queryResult);
+                    // console.log(queryResult);
                     util.bindContext(self, succ, queryResult, ind, fldArr, unit, type);
                 },
                 'processFailed': function() { alert('请求失败'); }
@@ -643,7 +638,7 @@ define(function(require, exports, module) {
                 this.initOpt();
             }
 
-            console.log(ind + ' ' + year_cnty + ' ' + table + ' ' + type);
+            // console.log(ind + ' ' + year_cnty + ' ' + table + ' ' + type);
             if (type == 'line') {
                 self.cnty = year_cnty || '上海市';
                 if (!year_cnty) year_cnty = '上海市';
@@ -679,7 +674,6 @@ define(function(require, exports, module) {
             var sqlservice = new gEcnu.WebsqlScript({
                 'processCompleted': function(data) {
                     var queryResult = data.queryResult;
-                    console.log(queryResult);
                     util.bindContext(self, succ, queryResult, ind, year_cnty, table, type);
                 },
                 'processFailed': function() { alert('请求失败'); }
@@ -695,7 +689,6 @@ define(function(require, exports, module) {
             $('#' + boxId).css('left', 'initial');
             var width_ct = $('#' + chartId).css('width');
             var width_box = $('#' + boxId).css('width');
-            console.log(width_ct);
             var sub_year_cntyId = this.getsubyearcntyId();
             var cnty = this.cnty,
                 year = this.year;
@@ -773,7 +766,6 @@ define(function(require, exports, module) {
         var year = charts.year;
         var cnty = charts.cnty;
         var toType = $(this).attr('to');
-        console.log(year + ' ' + cnty + ' ' + toType);
         charts.toggle4chart(this);
 
         switch (toType) {

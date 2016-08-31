@@ -406,7 +406,7 @@ define(function(require, exports, module) {
 
 
             function renderBrushed(params) {
-                console.log(params);
+                // console.log(params);
                 var mainSeries = params.batch[0].selected[0];
 
                 var selectedItems = [];
@@ -503,7 +503,7 @@ define(function(require, exports, module) {
                 geoCoordMap += '"' + cityLocData[i].CITYNAME + '":[' + cityLocData[i].LNG + ',' + cityLocData[i].LAT + '],';
             }
             geoCoordMap = JSON.parse(geoCoordMap.slice(0, -1) + '}');
-            console.log(geoCoordMap);
+            // console.log(geoCoordMap);
 
             var citysVal = [];
 
@@ -513,7 +513,7 @@ define(function(require, exports, module) {
                 oneCityObj.value = cityValRst[j]['[' + fldArr[1] + ']'];
                 citysVal.push(oneCityObj);
             }
-            console.log(citysVal);
+            // console.log(citysVal);
             if(this.callbackFuc){//有回掉函数，只是取得数据即可
                 this.callbackFuc(geoCoordMap, citysVal);
                 return;
@@ -544,10 +544,10 @@ define(function(require, exports, module) {
             sqlservice.processAscyn("SQLQUERY", "CJEB", sql);
         },
         _reqData: function(rst, ind, year, table) {
-            console.log(rst);
+            // console.log(rst);
             var self = this;
             var fldArr = ['V2', rst[0].FIELD];
-            console.log(fldArr);
+            // console.log(fldArr);
             var flds = util.fldsArrTostring(fldArr);
             var filter = "V4 =" + year;
             var unit = rst[0].UNIT;
@@ -571,7 +571,7 @@ define(function(require, exports, module) {
             sqlservice.processAscyn("SQLQUERY", "CJEB", sql);
         },
         renderInteractMap: function(table, ind, year) {
-            console.log('renderInteractMap' + ' table:' + table + ' ind: ' + ind + ' year: ' + year);
+            // console.log('renderInteractMap' + ' table:' + table + ' ind: ' + ind + ' year: ' + year);
             var self = this;
             self.ind = ind, self.tab = table;
             var tab = 'fieldsdef';
