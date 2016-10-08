@@ -137,7 +137,10 @@ define(function(require, exports, module) {
                 data: convertedData[0],
                 symbolSize: function(val) {
                     val[2] = val[2]?val[2]:0;
-                    return Math.max((val[2] / maxVal) * 20, 8);
+                    // console.log(Math.max((val[2] / maxVal) * 20, 8));
+                    var rtnVal = (val[2] / maxVal) * 30?Math.max((val[2] / maxVal) * 30,2):0;
+                    console.log(rtnVal);
+                    return rtnVal;
                 },
                 label: {
                     normal: {
@@ -161,7 +164,7 @@ define(function(require, exports, module) {
                 data: convertedData[1],
                 symbolSize: function(val) {
                     val[2] = val[2]?val[2]:0;
-                    return Math.max((val[2] / maxVal) * 20, 8);
+                    return (val[2] / maxVal) * 20;
                 },
                 showEffectOn: 'emphasis',
                 rippleEffect: {
@@ -419,20 +422,19 @@ define(function(require, exports, module) {
                 for (var i = 0; i < mainSeries.dataIndex.length; i++) {
                     var rawIndex = mainSeries.dataIndex[i];
                     var dataItem = convertedData[0][rawIndex];
-                    var pmValue = dataItem.value[2];
-                    sum += parseInt(pmValue);
+                    var pmValue = dataItem.value[2]?dataItem.value[2]:0;
+                    sum += parseFloat(pmValue);
                     count++;
 
                     selectedItems.push(dataItem);
                 }
-
                 selectedItems.sort(function(a, b) {
                     return a.value[2] - b.value[2];
                 });
 
-                for (var i = 0; i < Math.min(selectedItems.length, maxBar); i++) {
-                    categoryData.push(selectedItems[i].name);
-                    barData.push(selectedItems[i].value[2]);
+                for (var j = 0; j < Math.min(selectedItems.length, maxBar); j++) {
+                    categoryData.push(selectedItems[j].name);
+                    barData.push(selectedItems[j].value[2]);
                 }
 
                 self.myChart.setOption({ //修改部分option

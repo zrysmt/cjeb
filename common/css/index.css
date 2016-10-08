@@ -114,12 +114,17 @@ li {
 }
 
 .ftsty {
-    position: absolute;
+    /*position: absolute;*/
+    text-align: center;
     color: #666;
     font-size: 13px;
-    bottom: 20px;
+    line-height: 1.5;
+    margin-bottom: 5px;
+    /*bottom: 20px;*/
 }
-
+#address{
+    margin-bottom: 15px;
+}
 #dash_line {
     position: absolute;
     height: 2.7px;
@@ -130,13 +135,7 @@ li {
     background-position: 18px 0;
 }
 
-#copyrgt {
-    left: 40px;
-}
 
-#address {
-    right: 33px;
-}
 
 #infoTipWin {
     display: none;
