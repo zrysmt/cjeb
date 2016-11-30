@@ -101,9 +101,10 @@ define(function(require, exports, module) {
                 "destroy": true
             });
             table.on('draw', function() {
-                var h = $('.maintenance').height();
-                $('#foot').css('top', h + 240);
-                // $('#foot').css('display', 'none');
+                // var h = $('.maintenance').height();
+                // $('#foot').css('top', h + 240);
+                $('#foot').css('z-index', '-1');
+                $('#dash_line').css('z-index', '-1');
             });
 
         },

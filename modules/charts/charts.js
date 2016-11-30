@@ -6,9 +6,6 @@
 
 define(function(require, exports, module) {
 
-    // require('echarts/chart/map');
-    // require('echarts/chart/bar');
-    // require('echarts/chart/line');
     var dataStorage = require('../../common/js/dataStorage');
 
     var charts = {
@@ -77,6 +74,7 @@ define(function(require, exports, module) {
                     text: ['高', '低'],
                     realtime: false,
                     calculable: true,
+                    zlevel:99
                     // inRange: {
                     //     color: ['lightskyblue', 'yellow', 'orangered']
                     // }
@@ -312,6 +310,7 @@ define(function(require, exports, module) {
             var self = this;
             if (type == 'theme') {
                 var option1 = this.thm.option;
+                //自己修改的json数据
                 $.get('./common/jslib/publib/echarts/cjeb_china.json', function(cjebJson) {
                     echarts.registerMap('cjeb', cjebJson);
 

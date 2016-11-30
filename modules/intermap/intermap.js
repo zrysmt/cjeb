@@ -139,7 +139,7 @@ define(function(require, exports, module) {
                     val[2] = val[2]?val[2]:0;
                     // console.log(Math.max((val[2] / maxVal) * 20, 8));
                     var rtnVal = (val[2] / maxVal) * 30?Math.max((val[2] / maxVal) * 30,2):0;
-                    console.log(rtnVal);
+                    // console.log(rtnVal);
                     return rtnVal;
                 },
                 label: {
@@ -572,8 +572,19 @@ define(function(require, exports, module) {
             };
             sqlservice.processAscyn("SQLQUERY", "CJEB", sql);
         },
+        /**
+         * [renderInteractMap 渲染专题图的函数 其实它差不多相当于本模块的入口函数]
+         * @param  {[type]} table [description]
+         * @param  {[type]} ind   [description]
+         * @param  {[type]} year  [description]
+         * @return {[type]}       [description]
+         */
         renderInteractMap: function(table, ind, year) {
             // console.log('renderInteractMap' + ' table:' + table + ' ind: ' + ind + ' year: ' + year);
+            //隐藏youce箭头
+            if($('#toggle_logo').is(':visible')){
+                $('#toggle_logo').css('display', 'none');
+            }
             var self = this;
             self.ind = ind, self.tab = table;
             var tab = 'fieldsdef';
