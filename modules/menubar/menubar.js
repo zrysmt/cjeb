@@ -61,6 +61,7 @@ define(function (require, exports, module){
         var tab = $(this).attr('tab');
         $('#menu .menu').removeClass('menusel');
         $(this).parent().parent().parent().addClass('menusel');
+        console.log(ind,tab);
         menuList.trigger('menuclick',self,ind,tab);
     });
 

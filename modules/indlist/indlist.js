@@ -35,7 +35,7 @@ define(function(require, exports, module) {
             var initInd = rst[0].IND;
             var lastind = flag ? rst[0].IND2 : '';
             for (var i = 0, len = rst.length; i < len; i++) {
-                var ind = rst[i].IND;
+                var ind = $.trim(rst[i].IND);
                 var div = odiv.cloneNode(true);
                 var div2 = odiv2.cloneNode(true);
                 var img = oimg.cloneNode(true);
@@ -90,7 +90,6 @@ define(function(require, exports, module) {
         addIndOpt: function(root) {
             var self = this;
             var ind = $(root).text();
-            var flag = $(root).hasClass('multilevel');
             var tab = 'cjeb_ind';
             var field = "LEV3 as ind";
             var filter = "lev2 = '" + ind + "'";
@@ -100,15 +99,16 @@ define(function(require, exports, module) {
                 "tablename": tab,
                 "filter": filter
             };
+           /* var flag = $(root).hasClass('multilevel');
             if (flag) {
                 option.scriptname = "CJEB.indlist.getIndOpt_2";
                 option.filter += "AND UNIT<>'现价本币'";
-            }
+            }*/
             var succ = self._fillOpt;
             var sqlservice = new gEcnu.WebsqlScript({
                 'processCompleted': function(data) {
                     var queryResult = data.queryResult;
-                    util.bindContext(self, succ, queryResult, flag);
+                    util.bindContext(self, succ, queryResult/*, flag*/);
                 },
                 'processFailed': function() { alert('请求失败'); }
             });

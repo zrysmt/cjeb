@@ -1,5 +1,5 @@
 /**
- * 交互地图模块
+ * 交互地图模块,第一个模块
  * by zry
  * 2016-07-15
  */
@@ -16,7 +16,7 @@ define(function(require, exports, module) {
             }
             var year = 2008;
             this.cnty = '上海市';
-            
+            console.log(initInd, indtab, indName);
             this.renderInteractMap(indtab, initInd, year);
         },
         initOpt: function() {
@@ -588,13 +588,14 @@ define(function(require, exports, module) {
             var self = this;
             self.ind = ind, self.tab = table;
             var tab = 'fieldsdef';
-            var filter = "fieldRealname = '" + ind + "'";
-            filter += "AND tabname = '" + table + "'";
+            var filter = "fieldRealname like '%" + ind + "%'";
+            filter += " AND tabname like '%" + table + "%'";
+            console.log(filter);
             var succ = self._reqData;
             var sqlservice = new gEcnu.WebSQLServices.SQLServices({
                 'processCompleted': function(data) {
+                    console.log(data);
                     if (data.length && data.length !== 0) {
-                        // console.log(data);
                         util.bindContext(self, succ, data, ind, year, table);
                     }
                 },

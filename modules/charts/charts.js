@@ -1,8 +1,7 @@
-// require.config({
-//     paths: {
-//         echarts: '../common/js/dist'
-//     }
-// });
+/**
+ * 专题地图 图表展示
+ * by zry
+ */
 
 define(function(require, exports, module) {
 
@@ -392,7 +391,7 @@ define(function(require, exports, module) {
         },
 
         /**
-         * [_proRst4map ]
+         * [_proRst4map 专题地图]
          * @param  {[Object]} rst  [数据库查询(字段查询)结果:queryResult]
          * @param  {[type]} ind  [description]
          * @param  {[type]} karr [description]
@@ -407,7 +406,7 @@ define(function(require, exports, module) {
             var v_inx = karr[1];
             var data = [],
                 value = [];
-            var units = unit ? '(' + unit + ')' : '';
+            var units = unit&&unit!="null" ? '(' + unit + ')' : '';
             for (var j = 0; j < rst.length; j++) {
                 var obj = {};
                 obj.name = rst[j]['V2']; //城市名
@@ -522,7 +521,7 @@ define(function(require, exports, module) {
                 if (!params || params.length == 0) return;
                 var params = params[0];
                 if (params.value != '-' && params.value) {
-                    var value = (params.value.toFixed(2) + '').split('.');
+                    var value = ((params.value-0).toFixed(2) + '').split('.');
                     var decimal = value[1] ? '.' + value[1][0] + value[1][1] : '';
                     value = value[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') + decimal;
                     return params.name + ' : ' + value;
@@ -583,7 +582,7 @@ define(function(require, exports, module) {
         },
         _reqData: function(rst, ind, year_cnty, tab, type) {
             var self = this;
-
+            console.log(rst);
             var fldArr = ['V2', rst[0].FIELD];
             var filter;
             if (type == 'line') {
@@ -655,8 +654,8 @@ define(function(require, exports, module) {
             }
             self.ind = ind, self.tab = table;
             var tab = 'fieldsdef'; //查询出表中每列代表的含义
-            var filter = "fieldRealname = '" + ind + "'";
-            filter += "AND tabname = '" + table + "'";
+            var filter = "fieldRealname like '%" + ind + "%'";
+            filter += "AND tabname like '%" + table + "%'";
             var option = {
                 "scriptname": "CJEB.charts.getIndFld",
                 "ind": ind,
@@ -667,11 +666,15 @@ define(function(require, exports, module) {
                 var indArr = ind.split('(');
                 ind = indArr[0];
                 var unit = indArr[1].substring(0, indArr[1].length - 1);
-                option.filter = "fieldRealname = '" + ind + "'AND tabname = '" + table + "' AND unit = '" + unit + "'";
+                option.filter = "fieldRealname like '%" + ind + "%' AND tabname like '%" + table + "%' AND unit = '" + unit + "'";
             }
+
             var succ = self._reqData;
             var sqlservice = new gEcnu.WebsqlScript({
                 'processCompleted': function(data) {
+                    if(data&&data.queryResult.length!== 0){
+
+                    }
                     var queryResult = data.queryResult;
                     util.bindContext(self, succ, queryResult, ind, year_cnty, table, type);
                 },

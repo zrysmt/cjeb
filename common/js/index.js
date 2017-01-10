@@ -55,8 +55,8 @@ define(function(require) {
         gl_tab = tab;
         gl_year = $(obj).text() == '水资源' ? 2012 : 2008;
         gl_cnty = '上海市';
-        subTitleMod.init(obj);
-        indlistMod.init(obj);
+        subTitleMod.init(obj);//子标题
+        indlistMod.init(obj);//左边指标初始化
         // chartsMod.init(obj); 
         intermapMod.init(obj); //默认第一个绘制，初始化
         // intermapMod.renderInteractMap(gl_tab,gl_tab,gl_year);
